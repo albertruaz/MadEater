@@ -12,4 +12,12 @@
         android:layout_height="wrap_content"
         android:layout_weight="4" />
 
+    <!-- 버튼 -->
+    <Button
+        android:id="@+id/addContactButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom|end"
+        android:text="+" />
+
 </FrameLayout>
