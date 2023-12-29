@@ -4,9 +4,15 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -86,6 +92,56 @@ public class Contact extends Fragment {
         ListView listContact = view.findViewById(R.id.listContact);
         listContact.setAdapter(adapter);
 
+/*        // 새로운 입력을 받는 EditText들과 버튼 찾기
+        final EditText editTextName = view.findViewById(R.id.editTextName);
+        final EditText editTextPhoneNum = view.findViewById(R.id.editTextPhoneNum);*/
+        Button addContactButton = view.findViewById(R.id.addContactButton);
+
+        // 버튼 클릭 시의 동작 설정
+        addContactButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 다이얼로그 생성
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("Add Contact");
+
+                // 다이얼로그에 사용될 레이아웃 inflate
+                View dialogView = getLayoutInflater().inflate(R.layout.dialog_add_contact, null);
+                builder.setView(dialogView);
+
+                final EditText dialogNameEditText = dialogView.findViewById(R.id.dialogNameEditText);
+                final EditText dialogPhoneNumEditText = dialogView.findViewById(R.id.dialogPhoneNumEditText);
+
+                // 다이얼로그의 확인 버튼 동작 설정
+                builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // 새로운 연락처를 생성
+                        Map<String, String> newContact = new HashMap<>();
+                        newContact.put("name", dialogNameEditText.getText().toString());
+                        newContact.put("phoneNum", dialogPhoneNumEditText.getText().toString());
+
+                        // 연락처 목록에 추가
+                        contactList.add(newContact);
+
+                        // 어댑터 갱신
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+
+                // 다이얼로그의 취소 버튼 동작 설정
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                // 다이얼로그 표시
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
         return view;
     }
 }
