@@ -67,9 +67,6 @@ public class Contact extends Fragment {
                              Bundle savedInstanceState) {
 
         List<Map<String, String>> contactList = extract();
-        for (Map<String, String> contact : contactList) {
-            System.out.println(contact);
-        }
         // contact adapter 설정
 
         View view = inflater.inflate(R.layout.fragment_contact, container, false);
