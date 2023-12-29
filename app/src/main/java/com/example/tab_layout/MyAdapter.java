@@ -19,11 +19,11 @@ public class MyAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                FootBall footballFragment = new FootBall();
+                Contact footballFragment = new Contact();
                 return footballFragment;
             case 1:
-                Cricket cricketFragment = new Cricket();
-                return cricketFragment;
+                Photo photoFragment = new Photo();
+                return photoFragment;
             case 2:
                 NBA nbaFragment = new NBA();
                 return nbaFragment;

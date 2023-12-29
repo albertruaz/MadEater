@@ -96,8 +96,8 @@
               Football footballFragment = new Football();
               return footballFragment;
            case 1:
-              Cricket cricketFragment = new Cricket();
-              return cricketFragment;
+              Cricket photoFragment = new Cricket();
+              return photoFragment;
            case 2:
               NBA nbaFragment = new NBA();
               return nbaFragment;

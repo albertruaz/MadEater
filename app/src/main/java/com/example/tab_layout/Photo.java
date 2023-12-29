@@ -8,10 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class FootBall extends Fragment {
+public class Photo extends Fragment {
 
-
-    public FootBall() {
+    public Photo() {
         // Required empty public constructor
     }
 
@@ -19,6 +18,6 @@ public class FootBall extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_football, container, false);
+        return inflater.inflate(R.layout.fragment_photo, container, false);
     }
 }
