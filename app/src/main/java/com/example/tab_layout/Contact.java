@@ -63,7 +63,6 @@ public class Contact extends Fragment {
                 contact.put("phoneNum", phoneNum);
                 contactList.add(contact);
             }
-            System.out.println(contactList.size());
             return contactList;
         } catch (Exception e) {
             e.printStackTrace();

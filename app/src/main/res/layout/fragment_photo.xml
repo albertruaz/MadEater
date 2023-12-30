@@ -17,7 +17,6 @@
             android:numColumns="3"
             android:verticalSpacing="10dp"
             android:horizontalSpacing="10dp"
-
             />
 
     </LinearLayout>

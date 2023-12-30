@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -47,6 +49,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -56,26 +60,31 @@ import java.util.List;
 public class Photo extends Fragment {
 
     public Photo() {
-        // Required empty public constructor
     }
 
-    public class MyGridAdapter extends BaseAdapter {
-        Context context;
-        String[] files = null;
+    public class GridAdapter extends BaseAdapter {
+        private Context context;
+        private String[] files = null;
+        private ImageView imageView;
+        private AssetManager assetManager;
 
-        public MyGridAdapter(Context c){
+        public GridAdapter(Context c){
             context = c;
-            AssetManager assetManager = getActivity().getAssets();
+            assetManager = this.context.getAssets();
+
+            imageView = new ImageView(context);
+            imageView.setLayoutParams(new ViewGroup.LayoutParams(300,300));
+            imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            imageView.setPadding(5,5,5,5);
 
             try {
                 files = assetManager.list("images");
             } catch (IOException e) {
                 e.printStackTrace();
             }
-//            for(int j=0;j<files.length;j++)
-//                System.out.println(files[j]);
-            List<String> list = Arrays.asList(files);
-            files = list.subList(1, 6).toArray(new String[0]);
+//            List<String> list = Arrays.asList(files);
+//            files = list.subList(1, 10).toArray(new String[0]);
+
         }
 
         @Override
@@ -95,19 +104,27 @@ public class Photo extends Fragment {
 
         @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
-            ImageView imageView = new ImageView(context);
-            imageView.setLayoutParams(new ViewGroup.LayoutParams(300,300));
-            imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-            imageView.setPadding(5,5,5,5);
+            ImageView imageView = (ImageView) view;
 
-            AssetManager assetManager = getContext().getAssets();
-            try {
-                InputStream is = assetManager.open("images/"+files[i]);
-                Bitmap bitmap = BitmapFactory.decodeStream(is);
-                imageView.setImageBitmap(bitmap);
-            } catch (IOException e) {
-                e.printStackTrace();
+            if (imageView == null) {
+                imageView = new ImageView(context);
+                imageView.setLayoutParams(new ViewGroup.LayoutParams(300, 300));
+                imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                imageView.setPadding(5, 5, 5, 5);
             }
+
+            Glide.with(context)
+                    .load("file:///android_asset/images/" + files[i])
+                    .into(imageView);
+//            try {
+//                InputStream is = assetManager.open("images/" + files[i]);
+//                Bitmap bitmap = BitmapFactory.decodeStream(is);
+//                imageView.setImageBitmap(bitmap);
+//                is.close();
+//
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
 
             return imageView;
         }
@@ -120,10 +137,9 @@ public class Photo extends Fragment {
         // view생성, fragment기 때문에
         View view = inflater.inflate(R.layout.fragment_photo, container, false);
         GridView gridView = view.findViewById(R.id.gridView); //xml 부분 가져오기
-        MyGridAdapter gAdapter = new MyGridAdapter(getActivity()); // Adapter 데이터 포함
 
+        GridAdapter gAdapter = new GridAdapter(getActivity()); // Adapter 데이터 포함
         gridView.setAdapter(gAdapter);
-
 
         return view;
     }
