@@ -37,7 +37,7 @@ public class FileHelper {
         try (ParcelFileDescriptor pfd = context.getResources().openRawResourceFd(resourceId).getParcelFileDescriptor();
              FileOutputStream fileOutputStream = new FileOutputStream(pfd.getFileDescriptor());
              BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(fileOutputStream, StandardCharsets.UTF_8))) {
-
+            System.out.println("write");
             writer.write(jsonData);
 
         } catch (Exception e) {
