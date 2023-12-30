@@ -138,6 +138,7 @@ public class Photo extends Fragment {
                     .load("file:///android_asset/images/" + files[i])
                     .centerCrop() // 이미지 중앙을 기준으로 잘라냄
                     .into(imageView);
+
             // 이미지 클릭 이벤트 처리
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -151,7 +152,6 @@ public class Photo extends Fragment {
     }
 
     private void showFullScreenImage(String imagePath) {
-        // Show the Fragment for displaying full-screen image
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         FullScreenImageFragment fullScreenImageFragment = new FullScreenImageFragment(imagePath);
@@ -173,4 +173,5 @@ public class Photo extends Fragment {
 
         return view;
     }
+
 }
