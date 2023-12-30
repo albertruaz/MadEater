@@ -28,15 +28,15 @@ android {
 }
 
 dependencies {
-    //noinspection GradleCompatible
-    implementation 'com.android.support:design:28.0.0'
+    implementation 'com.google.android.material:material:1.4.0'
     implementation 'androidx.appcompat:appcompat:1.4.2'
     implementation 'com.google.android.material:material:1.6.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    testImplementation 'junit:junit:4.13.2'
+
+    implementation 'junit:junit:4.13.2'  // junit 버전을 통일
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.0'
-
+    implementation 'com.googlecode.json-simple:json-simple:1.1.1'
 }
