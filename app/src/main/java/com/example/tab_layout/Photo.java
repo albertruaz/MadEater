@@ -1,5 +1,7 @@
 package com.example.tab_layout;
 
+import static java.security.AccessController.getContext;
+
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
@@ -31,11 +33,32 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 
+
+import static android.app.PendingIntent.getActivity;
+
+import static java.security.AccessController.getContext;
+
+import android.content.Context;
+import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Arrays;
+import java.util.List;
+
+
 public class Photo extends Fragment {
 
     public Photo() {
         // Required empty public constructor
     }
+
     public class MyGridAdapter extends BaseAdapter {
         Context context;
         String[] files = null;
@@ -49,13 +72,10 @@ public class Photo extends Fragment {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            System.out.println("try");
-            for(int j=0;j<files.length;j++)
-                System.out.println(files[j]);
-
+//            for(int j=0;j<files.length;j++)
+//                System.out.println(files[j]);
             List<String> list = Arrays.asList(files);
-            files = list.subList(1, 10).toArray(new String[0]);
-
+            files = list.subList(1, 6).toArray(new String[0]);
         }
 
         @Override
@@ -92,15 +112,17 @@ public class Photo extends Fragment {
             return imageView;
         }
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        // view생성, fragment기 때문에
         View view = inflater.inflate(R.layout.fragment_photo, container, false);
-        GridView gv = view.findViewById(R.id.gridView);
-        MyGridAdapter gAdapter = new MyGridAdapter(getActivity());
+        GridView gridView = view.findViewById(R.id.gridView); //xml 부분 가져오기
+        MyGridAdapter gAdapter = new MyGridAdapter(getActivity()); // Adapter 데이터 포함
 
-        gv.setAdapter(gAdapter);
+        gridView.setAdapter(gAdapter);
 
 
         return view;
