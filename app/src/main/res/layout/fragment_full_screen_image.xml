@@ -4,7 +4,17 @@
     android:layout_height="match_parent"
     android:clickable="true"
     android:focusable="true"
+    android:id="@+id/frameLayout"
+    android:background="@color/black"
+
     >
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/title"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:text="Text1" />
 
     <ImageView
         android:id="@+id/fullScreenImageView"
@@ -12,5 +22,6 @@
         android:layout_height="match_parent"
         android:scaleType="fitCenter"
         android:padding="1dp" />
+
 
 </FrameLayout>
