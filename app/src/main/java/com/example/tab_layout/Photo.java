@@ -2,6 +2,7 @@ package com.example.tab_layout;
 
 import static java.security.AccessController.getContext;
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;

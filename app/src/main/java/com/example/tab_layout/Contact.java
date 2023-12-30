@@ -1,11 +1,13 @@
 package com.example.tab_layout;
 
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 
 import android.view.LayoutInflater;
@@ -20,7 +22,6 @@ import android.widget.SimpleAdapter;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,17 +30,17 @@ import java.util.Map;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 
 public class Contact extends Fragment {
+
+    private DBHelper dbHelper;
+    private SQLiteDatabase db;
+
     public Contact() {
         // Required empty public constructor
     }
+
 
     public List<Map<String, String>> extract() {
         try {
@@ -78,8 +79,28 @@ public class Contact extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        List<Map<String, String>> contactList = extract();
-        // contact adapter 설정
+//        List<Map<String, String>> contactList = extract();
+
+        List<Map<String, String>> contactList = new ArrayList<Map<String, String>>();
+
+        // DB에서 가져오기
+        dbHelper = new DBHelper(getActivity());
+        db = dbHelper.getWritableDatabase();
+        Cursor cursor = db.query("contact", new String[]{"id", "name", "phone_num"}, null, null, null, null, null);
+        if (cursor.moveToFirst()) {
+            do {
+                String name = cursor.getString(cursor.getColumnIndex("name"));
+                String phoneNum = cursor.getString(cursor.getColumnIndex("phone_num"));
+                Map<String, String> contact = new HashMap<String, String>(2);
+                contact.put("name", name);
+                contact.put("phoneNum", phoneNum);
+                System.out.println(name);
+                System.out.println(phoneNum);
+
+                contactList.add(contact);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
 
         View view = inflater.inflate(R.layout.fragment_contact, container, false);
 
@@ -96,6 +117,7 @@ public class Contact extends Fragment {
         listContact.setAdapter(adapter);
 
         Button addContactButton = view.findViewById(R.id.addContactButton);
+
 
         // 버튼 클릭 시의 동작 설정
         addContactButton.setOnClickListener(new View.OnClickListener() {
@@ -125,7 +147,7 @@ public class Contact extends Fragment {
                         contactList.add(newContact);
 
                         // JSON 파일 업데이트
-                        updateJsonFile(contactList);
+                        updateDb(newContact);
 
                         // 어댑터 갱신
                         adapter.notifyDataSetChanged();
@@ -150,39 +172,15 @@ public class Contact extends Fragment {
     }
 
     // JSON 파일 업데이트 메서드
-    private void updateJsonFile(List<Map<String, String>> contactList) {
-        System.out.println("update");
+    private void updateDb(Map<String, String> newContact) {
+        System.out.println("1update");
 
-        try {
-            // JSON 파일로 저장
-            System.out.println("try");
-            String jsonData = convertContactListToJson(contactList);
-            System.out.println("try");
-            FileHelper.writeJsonToFile(getActivity(), R.raw.contact_data, jsonData);
-            System.out.println("try");
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println("Error updating JSON file: " + e.getMessage());
-        }
-    }
+        ContentValues values = new ContentValues();
+        values.put("name", newContact.get("name"));
+        values.put("phone_num", newContact.get("phoneNum"));
 
-    private String convertContactListToJson(List<Map<String, String>> contactList) throws JsonProcessingException {
-        System.out.println("convert");
+        db.insert("contact", null, values);
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        ObjectNode jsonRoot = objectMapper.createObjectNode();
-        ArrayNode contactArray = objectMapper.createArrayNode();
-
-        for (Map<String, String> contact : contactList) {
-            ObjectNode contactObject = objectMapper.createObjectNode();
-            contactObject.put("name", contact.get("name"));
-            contactObject.put("phone_num", contact.get("phoneNum"));
-            contactArray.add(contactObject);
-        }
-
-        jsonRoot.set("contact", contactArray);
-
-        return objectMapper.writeValueAsString(jsonRoot);
     }
 
 }
