@@ -2,6 +2,7 @@ package com.example.tab_layout;
 
 import static java.security.AccessController.getContext;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
@@ -14,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,15 +69,26 @@ public class Photo extends Fragment {
         private String[] files = null;
         private ImageView imageView;
         private AssetManager assetManager;
+        private int screenWidth;
+        private int imageSize;
+
+        public int getScreenWidth() {
+            DisplayMetrics displayMetrics = new DisplayMetrics();
+            ((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+            return displayMetrics.widthPixels;
+        }
 
         public GridAdapter(Context c){
             context = c;
             assetManager = this.context.getAssets();
 
+            screenWidth = getScreenWidth();
+            imageSize = screenWidth / 3;
+
             imageView = new ImageView(context);
-            imageView.setLayoutParams(new ViewGroup.LayoutParams(300,300));
+            imageView.setLayoutParams(new ViewGroup.LayoutParams(imageSize,imageSize));
             imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-            imageView.setPadding(5,5,5,5);
+            imageView.setPadding(0,0,0,0);
 
             try {
                 files = assetManager.list("images");
@@ -108,7 +121,8 @@ public class Photo extends Fragment {
 
             if (imageView == null) {
                 imageView = new ImageView(context);
-                imageView.setLayoutParams(new ViewGroup.LayoutParams(300, 300));
+
+                imageView.setLayoutParams(new ViewGroup.LayoutParams(imageSize,imageSize));
                 imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
                 imageView.setPadding(0,0,0,0);
             }

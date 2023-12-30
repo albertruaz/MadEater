@@ -16,6 +16,9 @@
             android:numColumns="3"
             android:verticalSpacing="0dp"
             android:horizontalSpacing="0dp"
+            android:stretchMode="columnWidth"
+            android:gravity="center"
+
             />
 
     </LinearLayout>
