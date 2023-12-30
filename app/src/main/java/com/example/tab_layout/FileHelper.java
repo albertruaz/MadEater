@@ -33,12 +33,15 @@ public class FileHelper {
     }
 
     // JSON 파일로 데이터 쓰기
-    public static void writeJsonToFile(Context context, int resourceId, String jsonData) throws IOException {
+    public static void writeJsonToFile(Context context, int resourceId, String jsonData) {
         try (ParcelFileDescriptor pfd = context.getResources().openRawResourceFd(resourceId).getParcelFileDescriptor();
              FileOutputStream fileOutputStream = new FileOutputStream(pfd.getFileDescriptor());
              BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(fileOutputStream, StandardCharsets.UTF_8))) {
 
             writer.write(jsonData);
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

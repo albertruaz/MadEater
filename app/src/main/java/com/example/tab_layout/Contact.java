@@ -149,11 +149,16 @@ public class Contact extends Fragment {
 
     // JSON 파일 업데이트 메서드
     private void updateJsonFile(List<Map<String, String>> contactList) {
+        System.out.println("update");
+
         try {
             // JSON 파일로 저장
+            System.out.println("try");
             String jsonData = convertContactListToJson(contactList);
+            System.out.println("try");
             FileHelper.writeJsonToFile(getActivity(), R.raw.contact_data, jsonData);
-        } catch (IOException e) {
+            System.out.println("try");
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
