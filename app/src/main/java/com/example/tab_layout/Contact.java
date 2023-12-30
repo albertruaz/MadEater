@@ -29,6 +29,9 @@ import java.util.Map;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -148,29 +151,38 @@ public class Contact extends Fragment {
 
     // JSON 파일 업데이트 메서드
     private void updateJsonFile(List<Map<String, String>> contactList) {
+        System.out.println("update");
+
         try {
             // JSON 파일로 저장
+            System.out.println("try");
             String jsonData = convertContactListToJson(contactList);
+            System.out.println("try");
             FileHelper.writeJsonToFile(getActivity(), R.raw.contact_data, jsonData);
-        } catch (IOException e) {
+            System.out.println("try");
+        } catch (Exception e) {
             e.printStackTrace();
+            System.err.println("Error updating JSON file: " + e.getMessage());
         }
     }
 
-    private String convertContactListToJson(List<Map<String, String>> contactList) {
-        JSONObject jsonRoot = new JSONObject();
-        JSONArray contactArray = new JSONArray();
+    private String convertContactListToJson(List<Map<String, String>> contactList) throws JsonProcessingException {
+        System.out.println("convert");
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectNode jsonRoot = objectMapper.createObjectNode();
+        ArrayNode contactArray = objectMapper.createArrayNode();
 
         for (Map<String, String> contact : contactList) {
-            JSONObject contactObject = new JSONObject();
+            ObjectNode contactObject = objectMapper.createObjectNode();
             contactObject.put("name", contact.get("name"));
             contactObject.put("phone_num", contact.get("phoneNum"));
             contactArray.add(contactObject);
         }
 
-        jsonRoot.put("contact", contactArray);
+        jsonRoot.set("contact", contactArray);
 
-        return jsonRoot.toJSONString();
+        return objectMapper.writeValueAsString(jsonRoot);
     }
 
 }

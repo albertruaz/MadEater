@@ -110,21 +110,13 @@ public class Photo extends Fragment {
                 imageView = new ImageView(context);
                 imageView.setLayoutParams(new ViewGroup.LayoutParams(300, 300));
                 imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                imageView.setPadding(5, 5, 5, 5);
+                imageView.setPadding(0,0,0,0);
             }
 
             Glide.with(context)
                     .load("file:///android_asset/images/" + files[i])
+                    .centerCrop() // 이미지 중앙을 기준으로 잘라냄
                     .into(imageView);
-//            try {
-//                InputStream is = assetManager.open("images/" + files[i]);
-//                Bitmap bitmap = BitmapFactory.decodeStream(is);
-//                imageView.setImageBitmap(bitmap);
-//                is.close();
-//
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
 
             return imageView;
         }
