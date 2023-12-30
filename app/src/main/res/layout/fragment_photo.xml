@@ -12,9 +12,13 @@
         <GridView
             android:id="@+id/gridView"
             android:layout_width="match_parent"
-            android:layout_height="743dp"
-            android:gravity="center"
-            android:numColumns="4" />
+            android:layout_height="match_parent"
+            android:columnWidth="100dp"
+            android:numColumns="3"
+            android:verticalSpacing="10dp"
+            android:horizontalSpacing="10dp"
+
+            />
 
     </LinearLayout>
 

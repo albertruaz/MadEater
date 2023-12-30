@@ -1,6 +1,11 @@
 package com.example.tab_layout;
 
+import static java.security.AccessController.getContext;
+
 import android.content.Context;
+import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -16,37 +21,66 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import android.content.DialogInterface;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
+
+
+import static android.app.PendingIntent.getActivity;
+
+import static java.security.AccessController.getContext;
+
+import android.content.Context;
+import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Arrays;
+import java.util.List;
+
 
 public class Photo extends Fragment {
 
     public Photo() {
         // Required empty public constructor
     }
+
     public class MyGridAdapter extends BaseAdapter {
         Context context;
+        String[] files = null;
+
         public MyGridAdapter(Context c){
             context = c;
+            AssetManager assetManager = getActivity().getAssets();
+
+            try {
+                files = assetManager.list("images");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+//            for(int j=0;j<files.length;j++)
+//                System.out.println(files[j]);
+            List<String> list = Arrays.asList(files);
+            files = list.subList(1, 6).toArray(new String[0]);
         }
 
-        Integer[] picID = {
-                R.drawable.image_1,R.drawable.image_2,R.drawable.image_3,R.drawable.image_4,
-                R.drawable.image_1,R.drawable.image_2,R.drawable.image_3,R.drawable.image_4,
-                R.drawable.image_1,R.drawable.image_2,R.drawable.image_3,R.drawable.image_4,
-                R.drawable.image_1,R.drawable.image_2,R.drawable.image_3,R.drawable.image_4,
-                R.drawable.image_1,R.drawable.image_2,R.drawable.image_3,R.drawable.image_4,
-                R.drawable.image_1,R.drawable.image_2,R.drawable.image_3,R.drawable.image_4,
-                R.drawable.image_1,R.drawable.image_2,R.drawable.image_3,R.drawable.image_4,
-                R.drawable.image_1,R.drawable.image_2,R.drawable.image_3,R.drawable.image_4,
-                R.drawable.image_1,R.drawable.image_2,R.drawable.image_3,R.drawable.image_4,
-        };
-
-        // BaseAdapter를 상속받은 클래스가 구현해야 할 함수들은
-        // { getCount(), getItem(), getItemId(), getView() }
-        // Ctrl + i 를 눌러 한꺼번에 구현할 수 있습니다.
         @Override
         public int getCount() {
-            return picID.length;
+            return files.length;
         }
 
         @Override
@@ -62,23 +96,33 @@ public class Photo extends Fragment {
         @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
             ImageView imageView = new ImageView(context);
-            imageView.setLayoutParams(new ViewGroup.LayoutParams(200,300));
+            imageView.setLayoutParams(new ViewGroup.LayoutParams(300,300));
             imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
             imageView.setPadding(5,5,5,5);
 
-            imageView.setImageResource(picID[i]);
+            AssetManager assetManager = getContext().getAssets();
+            try {
+                InputStream is = assetManager.open("images/"+files[i]);
+                Bitmap bitmap = BitmapFactory.decodeStream(is);
+                imageView.setImageBitmap(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
             return imageView;
         }
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        // view생성, fragment기 때문에
         View view = inflater.inflate(R.layout.fragment_photo, container, false);
-        GridView gv = view.findViewById(R.id.gridView);
-        MyGridAdapter gAdapter = new MyGridAdapter(getActivity());
+        GridView gridView = view.findViewById(R.id.gridView); //xml 부분 가져오기
+        MyGridAdapter gAdapter = new MyGridAdapter(getActivity()); // Adapter 데이터 포함
 
-        gv.setAdapter(gAdapter);
+        gridView.setAdapter(gAdapter);
 
 
         return view;

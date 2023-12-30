@@ -8,11 +8,9 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 public class MyAdapter extends FragmentPagerAdapter {
 
-    Context context;
     int totalTabs;
     public MyAdapter(Context c, FragmentManager fm, int totalTabs) {
         super(fm);
-        context = c;
         this.totalTabs = totalTabs;
     }
     @Override
