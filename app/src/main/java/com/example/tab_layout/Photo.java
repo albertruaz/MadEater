@@ -1,7 +1,14 @@
 package com.example.tab_layout;
 
 import static java.security.AccessController.getContext;
+import android.content.Context;
+import android.os.Bundle;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.tab_layout.FullScreenImageFragment;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.AssetManager;
@@ -121,7 +128,6 @@ public class Photo extends Fragment {
 
             if (imageView == null) {
                 imageView = new ImageView(context);
-
                 imageView.setLayoutParams(new ViewGroup.LayoutParams(imageSize,imageSize));
                 imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
                 imageView.setPadding(0,0,0,0);
@@ -131,9 +137,26 @@ public class Photo extends Fragment {
                     .load("file:///android_asset/images/" + files[i])
                     .centerCrop() // 이미지 중앙을 기준으로 잘라냄
                     .into(imageView);
+            // 이미지 클릭 이벤트 처리
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showFullScreenImage(files[i]);
+                }
+            });
 
             return imageView;
         }
+    }
+
+    private void showFullScreenImage(String imagePath) {
+        // Show the Fragment for displaying full-screen image
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        FullScreenImageFragment fullScreenImageFragment = new FullScreenImageFragment(imagePath);
+        fragmentTransaction.replace(android.R.id.content, fullScreenImageFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 
     @Override
