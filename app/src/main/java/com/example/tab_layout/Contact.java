@@ -6,6 +6,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.fragment.app.FragmentManager;
+
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -16,6 +19,7 @@ import android.view.ViewGroup;
 
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
@@ -116,9 +120,23 @@ public class Contact extends Fragment {
         ListView listContact = view.findViewById(R.id.listContact);
         listContact.setAdapter(adapter);
 
+        listContact.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Map<String, String> clickedContact = contactList.get(position);
+                String name = clickedContact.get("name");
+                String phoneNum = clickedContact.get("phoneNum");
+
+                // Open Detail Fragment
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragment_container, ContactDetailFragment.newInstance(name, phoneNum));
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        });
+
+
         Button addContactButton = view.findViewById(R.id.addContactButton);
-
-
         // 버튼 클릭 시의 동작 설정
         addContactButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -168,6 +186,7 @@ public class Contact extends Fragment {
                 dialog.show();
             }
         });
+
         return view;
     }
 
