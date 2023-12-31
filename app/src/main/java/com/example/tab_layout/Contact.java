@@ -171,16 +171,11 @@ public class Contact extends Fragment {
         return view;
     }
 
-    // JSON 파일 업데이트 메서드
     private void updateDb(Map<String, String> newContact) {
-        System.out.println("1update");
-
         ContentValues values = new ContentValues();
         values.put("name", newContact.get("name"));
         values.put("phone_num", newContact.get("phoneNum"));
-
-        db.insert("contact", null, values);
-
+        dbHelper.onUpgrade(db, values);
     }
 
 }

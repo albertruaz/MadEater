@@ -45,7 +45,6 @@ public class FullScreenImageFragment extends Fragment {
         TextView titleView = view.findViewById(R.id.title);
         titleView.setText(imagePath);
 
-
         return view;
     }
 }
