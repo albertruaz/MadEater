@@ -40,8 +40,9 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase db, ContentValues values) {
-        db.insert("contact", null, values);
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS contact");
+        onCreate(db);
     }
 
     public void onUpgradeContact(SQLiteDatabase db, ContentValues values) {

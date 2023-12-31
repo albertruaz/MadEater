@@ -194,7 +194,7 @@ public class Contact extends Fragment {
         ContentValues values = new ContentValues();
         values.put("name", newContact.get("name"));
         values.put("phone_num", newContact.get("phoneNum"));
-        dbHelper.onUpgrade(db, values);
+        dbHelper.onUpgradeContact(db, values);
     }
 
 }
