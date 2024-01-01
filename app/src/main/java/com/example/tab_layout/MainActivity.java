@@ -15,10 +15,18 @@ public class MainActivity extends AppCompatActivity {
 
     TabLayout tabLayout;
     ViewPager viewPager;
+
+    private DBHelper dbHelper;
+
+    public DBHelper getDbHelper() {
+        return dbHelper;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        dbHelper = DBHelper.getInstance(this);
 
         // 탭 부분 xml 구현 -
         tabLayout = findViewById(R.id.tabLayout);
