@@ -43,7 +43,7 @@ public class Contact extends Fragment implements DataUpdateListener {
             adapter.updateData(contactList);
         }
     }
-    
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
