@@ -14,13 +14,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 // SearchFragment.java
-public class Search extends Fragment {
+public class Search extends Fragment implements DataUpdateListener {
 
     private SearchView searchView;
     private ListView searchResultsListView;
 
     public Search() {
         // Required empty public constructor
+    }
+    @Override
+    public void onDataUpdated() {
     }
 
     @Override

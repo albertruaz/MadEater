@@ -2,17 +2,30 @@ package com.example.tab_layout;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class DBHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "example.db";
     private static final int DATABASE_VERSION = 1;
+    private static DBHelper instance;
 
     public DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    }
+
+    public static synchronized DBHelper getInstance(Context context) {
+        if (instance == null) {
+            instance = new DBHelper(context.getApplicationContext());
+        }
+        return instance;
     }
 
     @Override
@@ -55,6 +68,23 @@ public class DBHelper extends SQLiteOpenHelper {
         if(Arrays.asList(ableDb).contains(updater)){
             db.insert(updater, null, values);
         }
+    }
+    public List<Map<String, String>> onSearchContact(SQLiteDatabase db){
 
+        List<Map<String, String>> contactList = new ArrayList<Map<String, String>>();
+        Cursor cursor = db.query("contact", new String[]{"id", "name", "phone_num"}, null, null, null, null, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                String name = cursor.getString(cursor.getColumnIndex("name"));
+                String phoneNum = cursor.getString(cursor.getColumnIndex("phone_num"));
+                Map<String, String> contact = new HashMap<String, String>(2);
+                contact.put("name", name);
+                contact.put("phoneNum", phoneNum);
+                contactList.add(contact);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return contactList;
     }
 }

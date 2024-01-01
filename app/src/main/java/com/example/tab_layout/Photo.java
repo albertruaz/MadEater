@@ -28,10 +28,11 @@ import android.content.Intent;
 import android.widget.Button;
 
 
-public class Photo extends Fragment {
+public class Photo extends Fragment implements DataUpdateListener {
 
     public Photo() {
     }
+    private GridAdapter adapter;
 
     private static final int REQUEST_TAKE_PHOTO= 1;
     private static final int REQUEST_PICK_IMAGE = 2;
@@ -115,6 +116,13 @@ public class Photo extends Fragment {
         }
     }
 
+    @Override
+    public void onDataUpdated() {
+        if (adapter != null) {
+            adapter.notifyDataSetChanged();
+        }
+    }
+
     private void showFullScreenImage(String imagePath) {
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -132,8 +140,8 @@ public class Photo extends Fragment {
         View view = inflater.inflate(R.layout.fragment_photo, container, false);
         GridView gridView = view.findViewById(R.id.gridView); //xml 부분 가져오기
 
-        GridAdapter gAdapter = new GridAdapter(getActivity()); // Adapter 데이터 포함
-        gridView.setAdapter(gAdapter);
+        adapter = new GridAdapter(getActivity()); // Adapter 데이터 포함
+        gridView.setAdapter(adapter);
 
         // 갤러리에서 사진 불러오기 버튼 클릭 이벤트 처리
         Button pickFromGalleryButton = view.findViewById(R.id.pickFromGalleryButton);

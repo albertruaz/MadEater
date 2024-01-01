@@ -7,9 +7,6 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.fragment.app.FragmentManager;
-
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 
@@ -23,92 +20,39 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
-
-public class Contact extends Fragment {
+public class Contact extends Fragment implements DataUpdateListener {
 
     private DBHelper dbHelper;
     private SQLiteDatabase db;
-
+    private ContactAdapter adapter;
     public Contact() {
         // Required empty public constructor
     }
-
-
-    public List<Map<String, String>> extract() {
-        try {
-            //jsonString 추출
-            InputStream inputStream = getResources().openRawResource(R.raw.contact_data);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-            StringBuilder StringBuilder = new StringBuilder();
-            for (int data = reader.read(); data != -1; data = reader.read()) {
-                StringBuilder.append((char) data);
-            }
-            String jsonString = StringBuilder.toString();
-
-            //jsonString 파싱
-            List<Map<String, String>> contactList = new ArrayList<Map<String, String>>();
-
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode rootNode = objectMapper.readTree(jsonString);
-            for (JsonNode addressNode : rootNode.path("contact")) {
-                String name = addressNode.path("name").asText();
-                String phoneNum = addressNode.path("phone_num").asText();
-
-                Map<String, String> contact = new HashMap<String, String>(2);
-                contact.put("name", name);
-                contact.put("phoneNum", phoneNum);
-                contactList.add(contact);
-            }
-            return contactList;
-        } catch (Exception e) {
-            e.printStackTrace();
+    @Override
+    public void onDataUpdated() {
+        if (adapter != null) {
+//            adapter.notifyDataSetChanged();
+            List<Map<String, String>> contactList = dbHelper.onSearchContact(db);
+            adapter.updateData(contactList);
         }
-        List<Map<String, String>> data = new ArrayList<Map<String, String>>();
-        return data;
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-//        List<Map<String, String>> contactList = extract();
-
-        List<Map<String, String>> contactList = new ArrayList<Map<String, String>>();
-
-        // DB에서 가져오기
-        dbHelper = new DBHelper(getActivity());
+        // db 설정
+        dbHelper = ((MainActivity) getActivity()).getDbHelper();
         db = dbHelper.getWritableDatabase();
-        Cursor cursor = db.query("contact", new String[]{"id", "name", "phone_num"}, null, null, null, null, null);
-        if (cursor.moveToFirst()) {
-            do {
-                String name = cursor.getString(cursor.getColumnIndex("name"));
-                String phoneNum = cursor.getString(cursor.getColumnIndex("phone_num"));
-                Map<String, String> contact = new HashMap<String, String>(2);
-                contact.put("name", name);
-                contact.put("phoneNum", phoneNum);
-                System.out.println(name);
-                System.out.println(phoneNum);
+        // db에서 가져오기
+        List<Map<String, String>> contactList = dbHelper.onSearchContact(db);
 
-                contactList.add(contact);
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
-
+        // view 및 adapter 연락
         View view = inflater.inflate(R.layout.fragment_contact, container, false);
-
-        SimpleAdapter adapter = new SimpleAdapter(
+        adapter = new ContactAdapter(
                 getActivity(),
                 contactList,
                 android.R.layout.simple_list_item_2,
@@ -116,43 +60,35 @@ public class Contact extends Fragment {
                 new int[]{android.R.id.text1, android.R.id.text2}
         );
 
-        // 리스트 뷰 찾기 및 어댑터 설정
+        // 리스트 뷰에 대한 설정
         ListView listContact = view.findViewById(R.id.listContact);
         listContact.setAdapter(adapter);
-
+        // 클릭시 상세정보 띄우기
         listContact.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Map<String, String> clickedContact = contactList.get(position);
                 String name = clickedContact.get("name");
                 String phoneNum = clickedContact.get("phoneNum");
-
-                // Open Detail Fragment
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, ContactDetailFragment.newInstance(name, phoneNum));
+                transaction.replace(R.id.fragment_container, ContactDetailFragment.newInstance(name, phoneNum),"data_display_fragment");
                 transaction.addToBackStack(null);
                 transaction.commit();
             }
         });
 
-
+        // 버튼에 대한 설정(클릭시 새로운 창 생성, 제출 기능)
         Button addContactButton = view.findViewById(R.id.addContactButton);
-        // 버튼 클릭 시의 동작 설정
         addContactButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 다이얼로그 생성
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle("Add Contact");
-
-                // 다이얼로그에 사용될 레이아웃 inflate
                 View dialogView = getLayoutInflater().inflate(R.layout.dialog_add_contact, null);
                 builder.setView(dialogView);
-
                 final EditText dialogNameEditText = dialogView.findViewById(R.id.dialogNameEditText);
                 final EditText dialogPhoneNumEditText = dialogView.findViewById(R.id.dialogPhoneNumEditText);
-
-                // 다이얼로그의 확인 버튼 동작 설정
+                // 새로운 창 내에서 제출 기능
                 builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -160,20 +96,12 @@ public class Contact extends Fragment {
                         Map<String, String> newContact = new HashMap<>();
                         newContact.put("name", dialogNameEditText.getText().toString());
                         newContact.put("phoneNum", dialogPhoneNumEditText.getText().toString());
-
-                        // 연락처 목록에 추가
                         contactList.add(newContact);
-
-                        // JSON 파일 업데이트
                         updateDb(newContact);
-
-                        // 어댑터 갱신
                         adapter.notifyDataSetChanged();
                     }
                 });
-
-
-                // 다이얼로그의 취소 버튼 동작 설정
+                // 새로운 창 내에서 취소
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -181,12 +109,10 @@ public class Contact extends Fragment {
                     }
                 });
 
-                // 다이얼로그 표시
                 AlertDialog dialog = builder.create();
                 dialog.show();
             }
         });
-
         return view;
     }
 
