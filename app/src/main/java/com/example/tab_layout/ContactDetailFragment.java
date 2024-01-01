@@ -1,5 +1,6 @@
 package com.example.tab_layout;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import android.view.LayoutInflater;
@@ -18,7 +19,13 @@ public class ContactDetailFragment extends Fragment {
 
     private DBHelper dbHelper;
     private SQLiteDatabase db;
+    DataUpdateListener updateListener;
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        updateListener = (DataUpdateListener) context;
+    }
 
     public static ContactDetailFragment newInstance(String name, String phoneNum) {
         ContactDetailFragment fragment = new ContactDetailFragment();
@@ -64,7 +71,8 @@ public class ContactDetailFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 deleteContactFromDatabase();
-                reloadContactFragment();
+//                reloadContactFragment();
+                fragmentManager.popBackStack();
             }
 
             // 연락처 삭제 메소드
@@ -73,9 +81,8 @@ public class ContactDetailFragment extends Fragment {
                 if (args != null) {
                     String name = args.getString("name", "");
                     String phoneNum = args.getString("phoneNum", "");
-
-                    // 예시: 이름과 전화번호가 일치하는 데이터 삭제
                     db.delete("contact", "name = ? AND phone_num = ?", new String[]{name, phoneNum});
+                    updateListener.onDataUpdated();
                 }
             }
 
@@ -92,7 +99,7 @@ public class ContactDetailFragment extends Fragment {
 
                     // 새로운 ContactFragment를 추가
                     ContactDetailFragment newContactFragment = new ContactDetailFragment();
-                    fragmentTransaction.add(R.id.fragment_container, newContactFragment, "contact_fragment_tag");
+                    fragmentTransaction.replace(R.id.fragment_container, newContactFragment, "contact_fragment_tag");
 
                     // 트랜잭션을 커밋하여 변경사항을 적용
                     fragmentTransaction.commit();

@@ -67,10 +67,11 @@ import java.util.Arrays;
 import java.util.List;
 
 
-public class Photo extends Fragment {
+public class Photo extends Fragment implements DataUpdateListener {
 
     public Photo() {
     }
+    private GridAdapter adapter;
 
     public class GridAdapter extends BaseAdapter {
         private Context context;
@@ -151,6 +152,13 @@ public class Photo extends Fragment {
         }
     }
 
+    @Override
+    public void onDataUpdated() {
+        if (adapter != null) {
+            adapter.notifyDataSetChanged();
+        }
+    }
+
     private void showFullScreenImage(String imagePath) {
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -168,8 +176,8 @@ public class Photo extends Fragment {
         View view = inflater.inflate(R.layout.fragment_photo, container, false);
         GridView gridView = view.findViewById(R.id.gridView); //xml 부분 가져오기
 
-        GridAdapter gAdapter = new GridAdapter(getActivity()); // Adapter 데이터 포함
-        gridView.setAdapter(gAdapter);
+        adapter = new GridAdapter(getActivity()); // Adapter 데이터 포함
+        gridView.setAdapter(adapter);
 
         return view;
     }

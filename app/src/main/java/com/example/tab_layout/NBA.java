@@ -8,10 +8,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class NBA extends Fragment {
+public class NBA extends Fragment implements DataUpdateListener {
 
     public NBA() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onDataUpdated() {
     }
 
     @Override
