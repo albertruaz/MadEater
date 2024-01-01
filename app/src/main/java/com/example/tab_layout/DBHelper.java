@@ -87,4 +87,41 @@ public class DBHelper extends SQLiteOpenHelper {
         cursor.close();
         return contactList;
     }
+
+    public List<Map<String, String>> search(String query) {
+        List<Map<String, String>> searchResults = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // 검색 쿼리
+        String selection = "name LIKE ? OR phone_num LIKE ?";
+        String[] selectionArgs = {"%" + query + "%", "%" + query + "%"};
+
+        Cursor cursor = db.query(
+                "contact",
+                new String[]{"name", "phone_num"},
+                selection,
+                selectionArgs,
+                null,
+                null,
+                null
+        );
+
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                // 결과 추가
+                String name = cursor.getString(cursor.getColumnIndex("name"));
+                String phoneNum = cursor.getString(cursor.getColumnIndex("phone_num"));
+                Map<String, String> contact1 = new HashMap<>();
+                contact1.put("name", name);
+                contact1.put("phoneNum", phoneNum);
+                searchResults.add(contact1);
+            } while (cursor.moveToNext());
+
+            cursor.close();
+        }
+
+        db.close();
+
+        return searchResults;
+    }
 }

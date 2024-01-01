@@ -1,5 +1,7 @@
 package com.example.tab_layout;
 
+import android.database.sqlite.SQLiteDatabase;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,14 +12,17 @@ import android.widget.SearchView;
 
 import androidx.fragment.app.Fragment;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 // SearchFragment.java
 public class Search extends Fragment implements DataUpdateListener {
 
     private SearchView searchView;
     private ListView searchResultsListView;
+    private DBHelper dbHelper;
+    private SQLiteDatabase db;
+    private ContactAdapter adapter;
 
     public Search() {
         // Required empty public constructor
@@ -29,6 +34,9 @@ public class Search extends Fragment implements DataUpdateListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
+
+        dbHelper = ((MainActivity) getActivity()).getDbHelper();
+        db = dbHelper.getWritableDatabase();
 
         searchView = view.findViewById(R.id.searchView);
         searchResultsListView = view.findViewById(R.id.searchResultsListView);
@@ -57,21 +65,21 @@ public class Search extends Fragment implements DataUpdateListener {
         // 검색어를 사용하여 연락처나 갤러리에서 검색하고 결과를 리스트뷰에 표시하는 로직을 작성
         // 예: SQLite에서 연락처 검색, 갤러리에서 이미지 검색 후 결과를 어댑터에 설정
         // 예제에서는 가상의 메서드로 대체
-        List<String> searchResults = getSearchResults(query);
+        List<Map<String, String>> searchResults = getSearchResults(query);
 
         // 어댑터를 사용하여 검색 결과를 리스트뷰에 설정
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1, searchResults);
+        adapter = new ContactAdapter(
+                getActivity(),
+                searchResults,
+                android.R.layout.simple_list_item_2,
+                new String[]{"name", "phoneNum"},
+                new int[]{android.R.id.text1, android.R.id.text2}
+        );
         searchResultsListView.setAdapter(adapter);
     }
 
-    private List<String> getSearchResults(String query) {
-        // 가상의 메서드: 실제로는 여기에서 데이터베이스나 갤러리에서 검색
-        // 검색 결과를 리스트로 반환
-        List<String> results = new ArrayList<>();
-        results.add("Result 1");
-        results.add("Result 2");
-        // ...
-
-        return results;
+    private List<Map<String, String>> getSearchResults(String query) {
+        List<Map<String, String>> searchResults = dbHelper.search(query);
+        return searchResults;
     }
 }
