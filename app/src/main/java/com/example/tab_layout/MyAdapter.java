@@ -23,8 +23,8 @@ public class MyAdapter extends FragmentPagerAdapter {
                 Photo photoFragment = new Photo();
                 return photoFragment;
             case 2:
-                NBA nbaFragment = new NBA();
-                return nbaFragment;
+                Search searchFragment = new Search();
+                return searchFragment;
             default:
                 return null;
         }

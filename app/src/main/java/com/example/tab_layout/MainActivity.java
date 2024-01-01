@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
         tabLayout = findViewById(R.id.tabLayout);
         tabLayout.addTab(tabLayout.newTab().setText("Contact"));
         tabLayout.addTab(tabLayout.newTab().setText("Photo"));
-        tabLayout.addTab(tabLayout.newTab().setText("NBA"));
+        tabLayout.addTab(tabLayout.newTab().setText("Search"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         //adapter 생성

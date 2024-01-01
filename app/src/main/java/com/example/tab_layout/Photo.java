@@ -1,27 +1,13 @@
 package com.example.tab_layout;
 
-import static java.security.AccessController.getContext;
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.example.tab_layout.FullScreenImageFragment;
 import android.app.Activity;
-import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -30,47 +16,25 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.SimpleAdapter;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
-import android.content.DialogInterface;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
-
-
-import static android.app.PendingIntent.getActivity;
-
-import static java.security.AccessController.getContext;
-
-import android.content.Context;
-import android.content.res.AssetManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Arrays;
-import java.util.List;
+import com.esafirm.imagepicker.features.ImagePicker;
+import com.esafirm.imagepicker.model.Image;
+import android.content.Intent;
+import android.widget.Button;
 
 
 public class Photo extends Fragment {
 
     public Photo() {
     }
+
+    private static final int REQUEST_TAKE_PHOTO= 1;
+    private static final int REQUEST_PICK_IMAGE = 2;
 
     public class GridAdapter extends BaseAdapter {
         private Context context;
@@ -171,7 +135,21 @@ public class Photo extends Fragment {
         GridAdapter gAdapter = new GridAdapter(getActivity()); // Adapter 데이터 포함
         gridView.setAdapter(gAdapter);
 
+        // 갤러리에서 사진 불러오기 버튼 클릭 이벤트 처리
+        Button pickFromGalleryButton = view.findViewById(R.id.pickFromGalleryButton);
+        pickFromGalleryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dispatchPickFromGalleryIntent();
+            }
+
+            // 갤러리에서 이미지 선택
+            private void dispatchPickFromGalleryIntent() {
+                Intent pickPhotoIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(pickPhotoIntent, REQUEST_PICK_IMAGE);
+            }
+        });
+
         return view;
     }
-
 }
