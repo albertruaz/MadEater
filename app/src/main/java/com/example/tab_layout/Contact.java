@@ -30,6 +30,7 @@ public class Contact extends Fragment implements DataUpdateListener {
     private DBHelper dbHelper;
     private SQLiteDatabase db;
     private ContactAdapter adapter;
+    Button addContactButton;
     public Contact() {
         // Required empty public constructor
     }
@@ -38,9 +39,11 @@ public class Contact extends Fragment implements DataUpdateListener {
         if (adapter != null) {
 //            adapter.notifyDataSetChanged();
             List<Map<String, String>> contactList = dbHelper.onSearchContact(db);
+            addContactButton.setVisibility(View.VISIBLE);
             adapter.updateData(contactList);
         }
     }
+    
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -60,25 +63,8 @@ public class Contact extends Fragment implements DataUpdateListener {
                 new int[]{android.R.id.text1, android.R.id.text2}
         );
 
-        // 리스트 뷰에 대한 설정
-        ListView listContact = view.findViewById(R.id.listContact);
-        listContact.setAdapter(adapter);
-        // 클릭시 상세정보 띄우기
-        listContact.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Map<String, String> clickedContact = contactList.get(position);
-                String name = clickedContact.get("name");
-                String phoneNum = clickedContact.get("phoneNum");
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, ContactDetailFragment.newInstance(name, phoneNum),"data_display_fragment");
-                transaction.addToBackStack(null);
-                transaction.commit();
-            }
-        });
-
         // 버튼에 대한 설정(클릭시 새로운 창 생성, 제출 기능)
-        Button addContactButton = view.findViewById(R.id.addContactButton);
+        addContactButton = view.findViewById(R.id.addContactButton);
         addContactButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -113,6 +99,25 @@ public class Contact extends Fragment implements DataUpdateListener {
                 dialog.show();
             }
         });
+
+        // 리스트 뷰에 대한 설정
+        ListView listContact = view.findViewById(R.id.listContact);
+        listContact.setAdapter(adapter);
+        // 클릭시 상세정보 띄우기
+        listContact.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                addContactButton.setVisibility(View.GONE);
+                Map<String, String> clickedContact = contactList.get(position);
+                String name = clickedContact.get("name");
+                String phoneNum = clickedContact.get("phoneNum");
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragment_container, ContactDetailFragment.newInstance(name, phoneNum),"data_display_fragment");
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        });
+
         return view;
     }
 

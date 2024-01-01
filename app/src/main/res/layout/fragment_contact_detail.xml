@@ -12,15 +12,16 @@
         android:id="@+id/detailNameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:layout_gravity="center_horizontal" />
 
     <TextView
         android:id="@+id/detailPhoneNumTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="16sp"/>
+        android:textSize="20sp"
+        android:layout_gravity="center_horizontal" />
 
     <Button
         android:id="@+id/deleteContactButton"

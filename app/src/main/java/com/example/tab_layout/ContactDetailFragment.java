@@ -49,6 +49,7 @@ public class ContactDetailFragment extends Fragment {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                updateListener.onDataUpdated();
                 fragmentManager.popBackStack();
             }
         });
@@ -106,8 +107,6 @@ public class ContactDetailFragment extends Fragment {
                 }
             }
         });
-
-
 
         return view;
     }

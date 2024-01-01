@@ -155,6 +155,8 @@ public class Photo extends Fragment implements DataUpdateListener {
             private void dispatchPickFromGalleryIntent() {
                 Intent pickPhotoIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(pickPhotoIntent, REQUEST_PICK_IMAGE);
+
+
             }
         });
 
