@@ -30,9 +30,11 @@ public class Contact extends Fragment implements DataUpdateListener {
     private DBHelper dbHelper;
     private SQLiteDatabase db;
     private ContactAdapter adapter;
+
     public Contact() {
         // Required empty public constructor
     }
+
     @Override
     public void onDataUpdated() {
         if (adapter != null) {

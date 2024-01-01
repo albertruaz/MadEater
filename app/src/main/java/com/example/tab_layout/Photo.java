@@ -1,7 +1,16 @@
 package com.example.tab_layout;
 
+import android.content.ContentResolver;
 import android.content.Context;
+import android.content.ContextWrapper;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -9,6 +18,7 @@ import android.app.Activity;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 
+import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +27,12 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+import java.util.Map;
 
 
 import com.bumptech.glide.Glide;
@@ -33,6 +48,7 @@ public class Photo extends Fragment implements DataUpdateListener {
     public Photo() {
     }
     private GridAdapter adapter;
+    private View view;
 
     private static final int REQUEST_TAKE_PHOTO= 1;
     private static final int REQUEST_PICK_IMAGE = 2;
@@ -40,6 +56,7 @@ public class Photo extends Fragment implements DataUpdateListener {
     public class GridAdapter extends BaseAdapter {
         private Context context;
         private String[] files = null;
+        private String[] galleryfiles = new String[0];
         private ImageView imageView;
         private AssetManager assetManager;
         private int screenWidth;
@@ -68,14 +85,11 @@ public class Photo extends Fragment implements DataUpdateListener {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-//            List<String> list = Arrays.asList(files);
-//            files = list.subList(1, 10).toArray(new String[0]);
-
         }
 
         @Override
         public int getCount() {
-            return files.length;
+            return files.length+galleryfiles.length;
         }
 
         @Override
@@ -100,7 +114,7 @@ public class Photo extends Fragment implements DataUpdateListener {
             }
 
             Glide.with(context)
-                    .load("file:///android_asset/images/" + files[i])
+                    .load(selectString(i))
                     .centerCrop() // 이미지 중앙을 기준으로 잘라냄
                     .into(imageView);
 
@@ -108,11 +122,27 @@ public class Photo extends Fragment implements DataUpdateListener {
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showFullScreenImage(files[i]);
+                    showFullScreenImage(selectString(i));
                 }
             });
 
             return imageView;
+        }
+
+
+        // 데이터를 업데이트하는 메서드
+        public void updateFileData(String newData) {
+            String[] newArray = new String[galleryfiles.length + 1];
+            System.arraycopy(galleryfiles, 0, newArray, 0, galleryfiles.length);
+            newArray[galleryfiles.length] = newData;
+            galleryfiles = newArray;
+        }
+
+        private String selectString(int i) {
+            if(i>=files.length){
+                return galleryfiles[i-files.length];
+            }
+            return "file:///android_asset/images/" + files[i];
         }
     }
 
@@ -137,27 +167,64 @@ public class Photo extends Fragment implements DataUpdateListener {
                              Bundle savedInstanceState) {
 
         // view생성, fragment기 때문에
-        View view = inflater.inflate(R.layout.fragment_photo, container, false);
+        view = inflater.inflate(R.layout.fragment_photo, container, false);
         GridView gridView = view.findViewById(R.id.gridView); //xml 부분 가져오기
 
         adapter = new GridAdapter(getActivity()); // Adapter 데이터 포함
         gridView.setAdapter(adapter);
 
         // 갤러리에서 사진 불러오기 버튼 클릭 이벤트 처리
+        ActivityResultLauncher<Intent> mGetContent = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        // 인텐트에서 이미지 데이터를 가져옵니다.
+                        Intent data = result.getData();
+                        if (data != null && data.getData() != null) {
+                            Uri selectedImageUri = data.getData();
+                            saveGalleryImage(selectedImageUri);
+                        }
+                    }
+                }
+            });
+
         Button pickFromGalleryButton = view.findViewById(R.id.pickFromGalleryButton);
         pickFromGalleryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dispatchPickFromGalleryIntent();
             }
-
             // 갤러리에서 이미지 선택
             private void dispatchPickFromGalleryIntent() {
-                Intent pickPhotoIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(pickPhotoIntent, REQUEST_PICK_IMAGE);
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                mGetContent.launch(intent);
             }
         });
 
         return view;
     }
+
+    private Bitmap getBitmapFromUri(Uri uri) throws IOException {
+        ContentResolver contentResolver = getActivity().getContentResolver();
+        InputStream inputStream = contentResolver.openInputStream(uri);
+        Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+        inputStream.close();
+        return bitmap;
+    }
+
+    public void saveGalleryImage(Uri imageUri) {
+//        Bitmap bitmap = null;
+//        try {
+//            bitmap = getBitmapFromUri(imageUri);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+        adapter.updateFileData(imageUri.toString());
+        //uri file 스트링에 저장
+
+    }
+
+
 }

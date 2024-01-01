@@ -38,9 +38,12 @@ public class FullScreenImageFragment extends Fragment {
         });
 
         // 이미지 경로를 받아와서 이미지 표시
+//        if (imagePath[0:1] != )
+
         Glide.with(requireContext())
-                .load("file:///android_asset/images/" + imagePath)
+                .load(imagePath)
                 .into(fullScreenImageView);
+
 
         TextView titleView = view.findViewById(R.id.title);
         titleView.setText(imagePath);
