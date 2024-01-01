@@ -88,8 +88,8 @@ public class DBHelper extends SQLiteOpenHelper {
         return contactList;
     }
 
-    public List<String> search(String query) {
-        List<String> searchResults = new ArrayList<>();
+    public List<Map<String, String>> search(String query) {
+        List<Map<String, String>> searchResults = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
 
         // 검색 쿼리
@@ -111,8 +111,10 @@ public class DBHelper extends SQLiteOpenHelper {
                 // 결과 추가
                 String name = cursor.getString(cursor.getColumnIndex("name"));
                 String phoneNum = cursor.getString(cursor.getColumnIndex("phone_num"));
-                searchResults.add(name);
-                searchResults.add(phoneNum);
+                Map<String, String> contact1 = new HashMap<>();
+                contact1.put("name", name);
+                contact1.put("phoneNum", phoneNum);
+                searchResults.add(contact1);
             } while (cursor.moveToNext());
 
             cursor.close();
