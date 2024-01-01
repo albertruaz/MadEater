@@ -11,7 +11,7 @@
         android:id="@+id/listContact"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="4"/>
+        android:layout_weight="10"/>
 
     <!-- 버튼 -->
     <Button
@@ -20,6 +20,7 @@
         android:layout_height="50dp"
         android:layout_gravity="bottom|end"
         android:layout_margin="10dp"
-        android:text="+" />
+        android:text="+"
+        android:textStyle="bold"/>
 
 </FrameLayout>
