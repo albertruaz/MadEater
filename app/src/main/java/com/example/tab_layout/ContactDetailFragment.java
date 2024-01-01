@@ -27,7 +27,7 @@ public class ContactDetailFragment extends Fragment {
         updateListener = (DataUpdateListener) context;
     }
 
-    public static ContactDetailFragment newInstance(String name, String phoneNum) {
+    public static ContactDetailFragment newInstance(String name, String phoneNum, int id) {
         ContactDetailFragment fragment = new ContactDetailFragment();
         Bundle args = new Bundle();
         args.putString("name", name);
