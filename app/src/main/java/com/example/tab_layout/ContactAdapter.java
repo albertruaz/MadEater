@@ -41,11 +41,6 @@ public class ContactAdapter extends BaseAdapter {
         return position;
     }
 
-//    @Override
-//    public View getView(int i, View view, ViewGroup viewGroup) {
-//        return null;
-//    }
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {

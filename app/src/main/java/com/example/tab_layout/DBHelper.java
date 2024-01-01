@@ -30,13 +30,18 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_TABLE = "CREATE TABLE contact (" +
+        String CREATE_CONTACT_TABLE = "CREATE TABLE contact (" +
                 "id INTEGER PRIMARY KEY," +
                 "name TEXT," +
                 "phone_num TEXT)";
-        db.execSQL(CREATE_TABLE);
+        String CREATE_HASHTAG_TABLE = "CREATE TABLE contact_hashtag (" +
+                "id INTEGER PRIMARY KEY," +
+                "hashtag TEXT)";
 
+        db.execSQL(CREATE_CONTACT_TABLE);
+        db.execSQL(CREATE_HASHTAG_TABLE);
     }
+
     public void onCreatePhoto(SQLiteDatabase db) {
         String CREATE_TABLE_PHOTO = "CREATE TABLE photo (" +
                 "id INTEGER PRIMARY KEY," +
@@ -57,28 +62,26 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS contact");
         onCreate(db);
     }
-
     public void onUpgradeContact(SQLiteDatabase db, ContentValues values) {
         db.insert("contact", null, values);
     }
 
-    public void onUpgradeHashtag(SQLiteDatabase db, ContentValues values,String updater){
-        String[] ableDb = {"photo","hashtag"};
+    public void onUpgradeContactHashtag(SQLiteDatabase db, int id, ContentValues value){
+        value.put("id", id);
+        db.insert("contact_hashtag", null, value);
 
-        if(Arrays.asList(ableDb).contains(updater)){
-            db.insert(updater, null, values);
-        }
     }
     public List<Map<String, String>> onSearchContact(SQLiteDatabase db){
 
         List<Map<String, String>> contactList = new ArrayList<Map<String, String>>();
         Cursor cursor = db.query("contact", new String[]{"id", "name", "phone_num"}, null, null, null, null, null);
-
         if (cursor.moveToFirst()) {
             do {
+                String id = cursor.getString(cursor.getColumnIndex("id"));
                 String name = cursor.getString(cursor.getColumnIndex("name"));
                 String phoneNum = cursor.getString(cursor.getColumnIndex("phone_num"));
                 Map<String, String> contact = new HashMap<String, String>(2);
+                contact.put("id", id);
                 contact.put("name", name);
                 contact.put("phoneNum", phoneNum);
                 contactList.add(contact);
