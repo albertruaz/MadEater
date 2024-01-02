@@ -26,8 +26,6 @@
         android:layout_gravity="center_horizontal"
         android:visibility="gone"/>
 
-
-
     <TextView
         android:id="@+id/detailPhoneNumTextView"
         android:layout_width="wrap_content"
@@ -36,14 +34,12 @@
         android:layout_gravity="center_horizontal" />
 
     <EditText
-        android:id="@+id/detailphoneNumEditText"
+        android:id="@+id/detailPhoneNumEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="20sp"
         android:layout_gravity="center_horizontal"
         android:visibility="gone"/>
-
-
 
     <TextView
         android:id="@+id/detailHashTagTextView"
@@ -51,6 +47,14 @@
         android:layout_height="wrap_content"
         android:textSize="20sp"
         android:layout_gravity="center_horizontal" />
+
+    <EditText
+        android:id="@+id/detailHashTagEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:layout_gravity="center_horizontal"
+        android:visibility="gone"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -82,7 +86,9 @@
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_margin="10dp"
-            android:text="SAVE"/>
+            android:text="SAVE"
+            android:background="@drawable/rounded_button"
+            android:visibility="gone"/>
 
         <Button
             android:id="@+id/callButton"
