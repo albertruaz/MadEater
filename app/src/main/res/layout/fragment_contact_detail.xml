@@ -52,27 +52,29 @@
         android:textSize="20sp"
         android:layout_gravity="center_horizontal" />
 
-
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:layout_below="@id/detailHashTagTextView"
         android:orientation="horizontal"
-        android:gravity="center">
+        android:gravity="center_horizontal">
 
         <Button
             android:id="@+id/deleteContactButton"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:layout_margin="10dp"
+            android:layout_margin="7dp"
+            android:background="@drawable/rounded_button"
             android:text="DELETE"/>
+
 
         <Button
             android:id="@+id/editContactButton"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:layout_margin="10dp"
+            android:layout_margin="7dp"
+            android:background="@drawable/rounded_button"
             android:text="EDIT"/>
 
         <Button
@@ -86,14 +88,16 @@
             android:id="@+id/callButton"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:layout_margin="10dp"
+            android:layout_margin="7dp"
+            android:background="@drawable/rounded_button"
             android:text="Call"/>
 
         <Button
             android:id="@+id/textButton"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:layout_margin="10dp"
+            android:layout_margin="7dp"
+            android:background="@drawable/rounded_button"
             android:text="Text"/>
 
     </LinearLayout>
