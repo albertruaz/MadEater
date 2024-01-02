@@ -15,12 +15,15 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import java.util.List;
+import java.util.Map;
+
 public class ContactDetailFragment extends Fragment {
 
     private DBHelper dbHelper;
     private SQLiteDatabase db;
-    DataUpdateListener updateListener;
 
+    DataUpdateListener updateListener;
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -32,6 +35,7 @@ public class ContactDetailFragment extends Fragment {
         Bundle args = new Bundle();
         args.putString("name", name);
         args.putString("phoneNum", phoneNum);
+        args.putString("contactId", id);
         fragment.setArguments(args);
         return fragment;
     }
@@ -57,13 +61,17 @@ public class ContactDetailFragment extends Fragment {
         // 이름 및 전화번호 띄우기
         TextView nameTextView = view.findViewById(R.id.detailNameTextView);
         TextView phoneNumTextView = view.findViewById(R.id.detailPhoneNumTextView);
+        TextView hashTagTextView = view.findViewById(R.id.detailHashTagTextView);
+
         Bundle args = getArguments();
         if (args != null) {
             String name = args.getString("name", "");
             String phoneNum = args.getString("phoneNum", "");
-
+            String contactId = args.getString("contactId", "");
+            String contactHashTag = dbHelper.onSearchContactHashTag(db,contactId);
             nameTextView.setText(name);
             phoneNumTextView.setText(phoneNum);
+            hashTagTextView.setText(contactHashTag);
         }
 
         //삭제 버튼 띄우기

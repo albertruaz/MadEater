@@ -65,7 +65,7 @@ public class Contact extends Fragment implements DataUpdateListener {
                 new int[]{android.R.id.text1, android.R.id.text2}
         );
 
-        // 버튼에 대한 설정(클릭시 새로운 창 생성, 제출 기능)
+        // +버튼에 대한 설정(클릭시 새로운 창 생성, 제출 기능)
         addContactButton = view.findViewById(R.id.addContactButton);
         addContactButton.setOnClickListener(new View.OnClickListener() {
             @Override

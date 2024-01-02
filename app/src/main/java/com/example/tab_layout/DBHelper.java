@@ -40,6 +40,18 @@ public class DBHelper extends SQLiteOpenHelper {
 
         db.execSQL(CREATE_CONTACT_TABLE);
         db.execSQL(CREATE_HASHTAG_TABLE);
+
+        List<String> tableNames = new ArrayList<>();
+        db = this.getReadableDatabase(); // 데이터베이스 인스턴스
+
+        Cursor cursor = db.rawQuery("SELECT name FROM sqlite_master WHERE type='table'", null);
+        if (cursor.moveToFirst()) {
+            while (!cursor.isAfterLast()) {
+                tableNames.add(cursor.getString(0));
+                cursor.moveToNext();
+            }
+        }
+        cursor.close();
     }
 
     public void onCreatePhoto(SQLiteDatabase db) {
@@ -90,6 +102,37 @@ public class DBHelper extends SQLiteOpenHelper {
         cursor.close();
         return contactList;
     }
+    public String onSearchContactHashTag(SQLiteDatabase db, String id){
+        Cursor cursor = null;
+
+        db = this.getReadableDatabase();
+
+        try {
+            cursor = db.query(
+                    "contact_hashtag",   // 테이블 이름
+                    new String[]{"hashtag"},              // 반환할 컬럼들
+                    "id = ?",            // 선택 조건
+                    new String[] { id }, // 선택 조건에 대한 값
+                    null,                // group by
+                    null,                // having
+                    null                 // order by
+            );
+            // 쿼리 결과 처리...
+        } catch (Exception e) {
+            e.printStackTrace();
+            // 예외 처리 로직
+        }
+
+        String out = "";
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                out = cursor.getString(cursor.getColumnIndex("hashtag"));
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        db.close();
+        return out;
+    }
 
     public List<Map<String, String>> search(String query) {
         List<Map<String, String>> searchResults = new ArrayList<>();
@@ -119,10 +162,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 contact1.put("phoneNum", phoneNum);
                 searchResults.add(contact1);
             } while (cursor.moveToNext());
-
             cursor.close();
         }
-
         db.close();
 
         return searchResults;
