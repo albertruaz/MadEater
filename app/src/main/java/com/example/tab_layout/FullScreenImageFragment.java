@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -25,12 +26,28 @@ import com.bumptech.glide.Glide;
 public class FullScreenImageFragment extends Fragment {
     private String imagePath;
 
+    private OnBackPressedCallback onBackPressedCallback;
+
+
     public FullScreenImageFragment(String imagePath) {
         this.imagePath = imagePath;
     }
 
     private DBHelper dbHelper;
     private SQLiteDatabase db;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        onBackPressedCallback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                fragmentManager.popBackStack();
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, onBackPressedCallback);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -93,6 +110,11 @@ public class FullScreenImageFragment extends Fragment {
         });
 
         return view;
+    }
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        onBackPressedCallback.remove();
     }
 }
 
