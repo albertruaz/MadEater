@@ -172,19 +172,28 @@ public class DBHelper extends SQLiteOpenHelper {
         return searchResults;
     }
 
-    public void onContactDelete(SQLiteDatabase db, String name, String phone_num, String contactId){
+    public void onContactDelete(SQLiteDatabase db, String name, String phone_num, String contactId, String contactHashTag){
         db = this.getReadableDatabase();
         db.delete("contact", "id = ?", new String[]{contactId});
+        db.delete("contact_hashtag", "id = ?", new String[]{contactId});
     }
-    public void onEditContact(SQLiteDatabase db, String contact_id, ContentValues values){
+    public void onEditContact(SQLiteDatabase db, String contact_id, String hashtag, ContentValues values, ContentValues values2){
         db = this.getReadableDatabase();
-
         String selection = "id = ?";
         String[] selectionArgs = { contact_id };
 
         // 테이블 업데이트
         db.update("contact", values, selection, selectionArgs);
+        db.update("contact_hashtag", values2, selection, selectionArgs);
 
+        // 새로운 hashtag 생성 및 저장
+        String existingHashtag = onSearchContactHashTag(db, contact_id);
+        if (existingHashtag == null || existingHashtag.isEmpty()) {
+            ContentValues newHashtagValues = new ContentValues();
+            newHashtagValues.put("id", contact_id);
+            newHashtagValues.put("hashtag", hashtag); // 여기에 새로운 hashtag 값을 넣어줘
+            db.insert("contact_hashtag", null, newHashtagValues);
+        }
     }
 
     //에러 확인용도

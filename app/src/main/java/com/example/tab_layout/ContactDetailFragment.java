@@ -27,6 +27,11 @@ public class ContactDetailFragment extends Fragment {
     private DBHelper dbHelper;
     private SQLiteDatabase db;
 
+    private String name;
+    private String phoneNum;
+    private String contactId;
+    private String contactHashTag;
+
     DataUpdateListener updateListener;
     @Override
     public void onAttach(Context context) {
@@ -67,9 +72,10 @@ public class ContactDetailFragment extends Fragment {
         EditText detailNameEditText = view.findViewById(R.id.detailNameEditText);
 
         TextView detailPhoneNumTextView = view.findViewById(R.id.detailPhoneNumTextView);
-        EditText detailphoneNumEditText = view.findViewById(R.id.detailphoneNumEditText);
+        EditText detailPhoneNumEditText = view.findViewById(R.id.detailPhoneNumEditText);
 
-        TextView hashTagTextView = view.findViewById(R.id.detailHashTagTextView);
+        TextView detailHashTagTextView = view.findViewById(R.id.detailHashTagTextView);
+        EditText detailHashTagEditText = view.findViewById(R.id.detailHashTagEditText);
 
         // 각종 버튼들
         Button deleteButton = view.findViewById(R.id.deleteContactButton);
@@ -80,13 +86,13 @@ public class ContactDetailFragment extends Fragment {
 
         Bundle args = getArguments();
         if (args != null) {
-            String name = args.getString("name", "");
-            String phoneNum = args.getString("phoneNum", "");
-            String contactId = args.getString("contactId", "");
-            String contactHashTag = dbHelper.onSearchContactHashTag(db,contactId);
+            name = args.getString("name", "");
+            phoneNum = args.getString("phoneNum", "");
+            contactId = args.getString("contactId", "");
+            contactHashTag = dbHelper.onSearchContactHashTag(db, contactId);
             detailNameTextView.setText(name);
             detailPhoneNumTextView.setText(phoneNum);
-            hashTagTextView.setText(contactHashTag);
+            detailHashTagTextView.setText(contactHashTag);
         }
 
         //삭제 버튼 띄우기
@@ -102,10 +108,11 @@ public class ContactDetailFragment extends Fragment {
             private void deleteContactFromDatabase() {
                 Bundle args = getArguments();
                 if (args != null) {
-                    String name = args.getString("name", "");
-                    String phoneNum = args.getString("phoneNum", "");
-                    String contactId = args.getString("contactId", "");
-                    dbHelper.onContactDelete(db, name, phoneNum,contactId);
+                    name = args.getString("name", "");
+                    phoneNum = args.getString("phoneNum", "");
+                    contactId = args.getString("contactId", "");
+                    contactHashTag = dbHelper.onSearchContactHashTag(db,contactId);
+                    dbHelper.onContactDelete(db, name, phoneNum, contactId, contactHashTag);
                     updateListener.onDataUpdated();
                 }
             }
@@ -135,13 +142,20 @@ public class ContactDetailFragment extends Fragment {
         editContactButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                editContactButton.setVisibility(View.GONE);
+                saveContactButton.setVisibility(View.VISIBLE);
+
                 detailNameTextView.setVisibility(View.GONE);
                 detailNameEditText.setVisibility(View.VISIBLE);
                 detailNameEditText.setText(detailNameTextView.getText());
 
                 detailPhoneNumTextView.setVisibility(View.GONE);
-                detailphoneNumEditText.setVisibility(View.VISIBLE);
-                detailphoneNumEditText.setText(detailPhoneNumTextView.getText());
+                detailPhoneNumEditText.setVisibility(View.VISIBLE);
+                detailPhoneNumEditText.setText(detailPhoneNumTextView.getText());
+
+                detailHashTagTextView.setVisibility(View.GONE);
+                detailHashTagEditText.setVisibility(View.VISIBLE);
+                detailHashTagEditText.setText(detailHashTagTextView.getText());
             }
         });
 
@@ -149,23 +163,30 @@ public class ContactDetailFragment extends Fragment {
         saveContactButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // 수정사항 저장될 수 있게
                 String contactId = args.getString("contactId", "");
                 ContentValues values = new ContentValues();
+                ContentValues values2 = new ContentValues();
                 values.put("name", detailNameEditText.getText().toString());
-                values.put("phone_num", detailphoneNumEditText.getText().toString());
+                values.put("phone_num", detailPhoneNumEditText.getText().toString());
+                values2.put("hashtag", detailHashTagEditText.getText().toString());
 
-                dbHelper.onEditContact(db, contactId, values);
+                dbHelper.onEditContact(db, contactId, contactHashTag, values, values2);
                 updateListener.onDataUpdated();
+
+                saveContactButton.setVisibility(View.GONE);
+                editContactButton.setVisibility(View.VISIBLE);
 
                 detailNameEditText.setVisibility(View.GONE);
                 detailNameTextView.setVisibility(View.VISIBLE);
                 detailNameTextView.setText(detailNameEditText.getText());
 
-                detailphoneNumEditText.setVisibility(View.GONE);
+                detailPhoneNumEditText.setVisibility(View.GONE);
                 detailPhoneNumTextView.setVisibility(View.VISIBLE);
-                detailPhoneNumTextView.setText(detailphoneNumEditText.getText());
+                detailPhoneNumTextView.setText(detailPhoneNumEditText.getText());
 
+                detailHashTagEditText.setVisibility(View.GONE);
+                detailHashTagTextView.setVisibility(View.VISIBLE);
+                detailHashTagTextView.setText(detailHashTagTextView.getText());
             }
         });
 
