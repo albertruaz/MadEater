@@ -102,7 +102,7 @@ public class FullScreenImageFragment extends Fragment {
                 saveButton.setVisibility(View.GONE);
                 editButton.setVisibility(View.VISIBLE);
                 String hashtag = hashtagEdit.getText().toString();
-                dbHelper.onEditPhotoHashtag(db, imagePath, hashtag);
+                dbHelper.onEditPhotoHashtag(imagePath, hashtag);
                 hashtagEdit.setVisibility(View.GONE);
                 hashtagView.setVisibility(View.VISIBLE);
                 hashtagView.setText(hashtagEdit.getText());

@@ -30,7 +30,8 @@ public class ContactDetailFragment extends Fragment {
     private String name;
     private String phoneNum;
     private String contactId;
-    private String contactHashTag;
+    private String path;
+    private String hashTag;
 
     DataUpdateListener updateListener;
     @Override
@@ -39,12 +40,15 @@ public class ContactDetailFragment extends Fragment {
         updateListener = (DataUpdateListener) context;
     }
 
-    public static ContactDetailFragment newInstance(String name, String phoneNum, String id) {
+    public static ContactDetailFragment newInstance(String id) {
         ContactDetailFragment fragment = new ContactDetailFragment();
         Bundle args = new Bundle();
-        args.putString("name", name);
-        args.putString("phoneNum", phoneNum);
         args.putString("contactId", id);
+        args.putString("name", args.getString("name", ""));
+        args.putString("phoneNum", args.getString("phoneNum", ""));
+        args.putString("path", args.getString("path", ""));
+        args.putString("hashTag", args.getString("hashTag", ""));
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -74,6 +78,9 @@ public class ContactDetailFragment extends Fragment {
         TextView detailPhoneNumTextView = view.findViewById(R.id.detailPhoneNumTextView);
         EditText detailPhoneNumEditText = view.findViewById(R.id.detailPhoneNumEditText);
 
+        TextView detailPathTextView = view.findViewById(R.id.detailPathTextView);
+        EditText detailPathEditText = view.findViewById(R.id.detailPathEditText);
+
         TextView detailHashTagTextView = view.findViewById(R.id.detailHashTagTextView);
         EditText detailHashTagEditText = view.findViewById(R.id.detailHashTagEditText);
 
@@ -86,13 +93,15 @@ public class ContactDetailFragment extends Fragment {
 
         Bundle args = getArguments();
         if (args != null) {
+            contactId = args.getString("contactId", "");
             name = args.getString("name", "");
             phoneNum = args.getString("phoneNum", "");
-            contactId = args.getString("contactId", "");
-            contactHashTag = dbHelper.onSearchContactHashTag(db, contactId);
+            path = args.getString("path", "");
+            hashTag = args.getString("hashTag", "");
             detailNameTextView.setText(name);
             detailPhoneNumTextView.setText(phoneNum);
-            detailHashTagTextView.setText(contactHashTag);
+            detailPathTextView.setText(path);
+            detailHashTagTextView.setText(hashTag);
         }
 
         //삭제 버튼 띄우기
@@ -108,11 +117,12 @@ public class ContactDetailFragment extends Fragment {
             private void deleteContactFromDatabase() {
                 Bundle args = getArguments();
                 if (args != null) {
+                    contactId = args.getString("contactId", "");
                     name = args.getString("name", "");
                     phoneNum = args.getString("phoneNum", "");
-                    contactId = args.getString("contactId", "");
-                    contactHashTag = dbHelper.onSearchContactHashTag(db,contactId);
-                    dbHelper.onContactDelete(db, name, phoneNum, contactId, contactHashTag);
+                    path = args.getString("path", "");
+                    hashTag = args.getString("hashTag", "");
+                    dbHelper.onContactDelete(contactId);
                     updateListener.onDataUpdated();
                 }
             }
@@ -153,6 +163,10 @@ public class ContactDetailFragment extends Fragment {
                 detailPhoneNumEditText.setVisibility(View.VISIBLE);
                 detailPhoneNumEditText.setText(detailPhoneNumTextView.getText());
 
+                detailPathTextView.setVisibility(View.GONE);
+                detailPathEditText.setVisibility(View.VISIBLE);
+                detailPathEditText.setText(detailPathTextView.getText());
+
                 detailHashTagTextView.setVisibility(View.GONE);
                 detailHashTagEditText.setVisibility(View.VISIBLE);
                 detailHashTagEditText.setText(detailHashTagTextView.getText());
@@ -165,12 +179,13 @@ public class ContactDetailFragment extends Fragment {
             public void onClick(View view) {
                 String contactId = args.getString("contactId", "");
                 ContentValues values = new ContentValues();
-                ContentValues values2 = new ContentValues();
+//                ContentValues values2 = new ContentValues();
                 values.put("name", detailNameEditText.getText().toString());
                 values.put("phone_num", detailPhoneNumEditText.getText().toString());
-                values2.put("hashtag", detailHashTagEditText.getText().toString());
+                values.put("path", detailPathEditText.getText().toString());
+                values.put("hash_tag", detailHashTagEditText.getText().toString());
 
-                dbHelper.onEditContact(db, contactId, contactHashTag, values, values2);
+                dbHelper.onEditContact(contactId, values);
 
                 saveContactButton.setVisibility(View.GONE);
                 editContactButton.setVisibility(View.VISIBLE);
@@ -182,6 +197,10 @@ public class ContactDetailFragment extends Fragment {
                 detailPhoneNumEditText.setVisibility(View.GONE);
                 detailPhoneNumTextView.setVisibility(View.VISIBLE);
                 detailPhoneNumTextView.setText(detailPhoneNumEditText.getText());
+
+                detailPathEditText.setVisibility(View.GONE);
+                detailPathTextView.setVisibility(View.VISIBLE);
+                detailPathTextView.setText(detailPathEditText.getText());
 
                 detailHashTagEditText.setVisibility(View.GONE);
                 detailHashTagTextView.setVisibility(View.VISIBLE);
@@ -219,11 +238,11 @@ public class ContactDetailFragment extends Fragment {
 
         return view;
     }
-    private void updateDb(Map<String, String> newContact) {
-        ContentValues values = new ContentValues();
-        values.put("name", newContact.get("name"));
-        values.put("phone_num", newContact.get("phoneNum"));
-        dbHelper.onUpgradeContact(db, values);
-    }
+//    private void updateDb(Map<String, String> newContact) {
+//        ContentValues values = new ContentValues();
+//        values.put("name", newContact.get("name"));
+//        values.put("phone_num", newContact.get("phoneNum"));
+//        dbHelper.onUpgradeContact(db, values);
+//    }
 }
 

@@ -44,7 +44,7 @@
         android:visibility="gone"/>
 
     <TextView
-        android:id="@+id/detailHashTagTextView"
+        android:id="@+id/detailPathTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/detailPhoneNumTextView"
@@ -52,10 +52,27 @@
         android:layout_gravity="center_horizontal" />
 
     <EditText
-        android:id="@+id/detailHashTagEditText"
+        android:id="@+id/detailPathEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/detailPhoneNumEditText"
+        android:textSize="20sp"
+        android:layout_gravity="center_horizontal"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/detailHashTagTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/detailPathTextView"
+        android:textSize="20sp"
+        android:layout_gravity="center_horizontal" />
+
+    <EditText
+        android:id="@+id/detailHashTagEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/detailPathEditText"
         android:textSize="20sp"
         android:layout_gravity="center_horizontal"
         android:visibility="gone"/>
@@ -114,8 +131,6 @@
             android:background="@drawable/rounded_button"
             android:text="Text"/>
 
-    </LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="70sp">
+    </LinearLayout>
 
 </LinearLayout>
