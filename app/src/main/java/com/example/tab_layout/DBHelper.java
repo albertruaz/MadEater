@@ -22,11 +22,11 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public static synchronized DBHelper getInstance(Context context) {
-        return instance = new DBHelper(context.getApplicationContext());
-//        if (instance == null) {
-//            instance = new DBHelper(context.getApplicationContext());
-//        }
-//        return instance;
+//        return instance = new DBHelper(context.getApplicationContext());
+        if (instance == null) {
+            instance = new DBHelper(context.getApplicationContext());
+        }
+        return instance;
     }
 
     @Override
@@ -70,7 +70,6 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onUpgradeContactHashtag(SQLiteDatabase db, int id, ContentValues value){
         value.put("id", id);
         db.insert("contact_hashtag", null, value);
-
     }
     public List<Map<String, String>> onSearchContact(SQLiteDatabase db){
 //        checkTableList(db);
@@ -92,10 +91,8 @@ public class DBHelper extends SQLiteOpenHelper {
         return contactList;
     }
     public String onSearchContactHashTag(SQLiteDatabase db, String id){
-
         Cursor cursor = null;
         db = this.getReadableDatabase();
-
         try {
             cursor = db.query(
                     "contact_hashtag",   // 테이블 이름
@@ -111,7 +108,6 @@ public class DBHelper extends SQLiteOpenHelper {
             e.printStackTrace();
             // 예외 처리 로직
         }
-
         String out = "";
         if (cursor != null && cursor.moveToFirst()) {
             do {
@@ -119,7 +115,6 @@ public class DBHelper extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
             cursor.close();
         }
-        db.close();
         return out;
     }
 
@@ -158,10 +153,9 @@ public class DBHelper extends SQLiteOpenHelper {
         return searchResults;
     }
 
-    public void onContactDelete(SQLiteDatabase db, String name, String phone_num){
+    public void onContactDelete(SQLiteDatabase db, String name, String phone_num, String contactId){
         db = this.getReadableDatabase();
-        db.delete("contact", "name = ? AND phone_num = ?", new String[]{name, phone_num});
-        db.close();
+        db.delete("contact", "id = ?", new String[]{contactId});
     }
 
     public void checkTableList(SQLiteDatabase db){

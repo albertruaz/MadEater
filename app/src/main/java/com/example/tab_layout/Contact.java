@@ -53,6 +53,15 @@ public class Contact extends Fragment implements DataUpdateListener {
         dbHelper = ((MainActivity) getActivity()).getDbHelper();
         db = dbHelper.getWritableDatabase();
         // db에서 가져오기
+
+        Map<String, String> newContact = new HashMap<>();
+        newContact.put("name", "몰입캠프");
+        newContact.put("phoneNum", "010-5959-5959");
+        updateDb(newContact);
+        newContact.put("name", "카이스트");
+        newContact.put("phoneNum", "042-350-5959");
+        updateDb(newContact);
+
         List<Map<String, String>> contactList = dbHelper.onSearchContact(db);
 
         // view 및 adapter 연락
@@ -84,7 +93,7 @@ public class Contact extends Fragment implements DataUpdateListener {
                         Map<String, String> newContact = new HashMap<>();
                         newContact.put("name", dialogNameEditText.getText().toString());
                         newContact.put("phoneNum", dialogPhoneNumEditText.getText().toString());
-                        contactList.add(newContact);
+//                        contactList.add(newContact);
                         updateDb(newContact);
                         adapter.notifyDataSetChanged();
                     }

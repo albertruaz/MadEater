@@ -98,7 +98,8 @@ public class ContactDetailFragment extends Fragment {
                 if (args != null) {
                     String name = args.getString("name", "");
                     String phoneNum = args.getString("phoneNum", "");
-                    dbHelper.onContactDelete(db, name, phoneNum);
+                    String contactId = args.getString("contactId", "");
+                    dbHelper.onContactDelete(db, name, phoneNum,contactId);
                     updateListener.onDataUpdated();
                 }
             }
