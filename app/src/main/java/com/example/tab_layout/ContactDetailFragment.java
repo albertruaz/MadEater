@@ -151,7 +151,6 @@ public class ContactDetailFragment extends Fragment {
             public void onClick(View view) {
                 // 수정사항 저장될 수 있게
                 String contactId = args.getString("contactId", "");
-
                 ContentValues values = new ContentValues();
                 values.put("name", detailNameEditText.getText().toString());
                 values.put("phone_num", detailphoneNumEditText.getText().toString());
@@ -166,7 +165,6 @@ public class ContactDetailFragment extends Fragment {
                 detailphoneNumEditText.setVisibility(View.GONE);
                 detailPhoneNumTextView.setVisibility(View.VISIBLE);
                 detailPhoneNumTextView.setText(detailphoneNumEditText.getText());
-
 
             }
         });

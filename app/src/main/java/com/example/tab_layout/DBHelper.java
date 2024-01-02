@@ -42,22 +42,15 @@ public class DBHelper extends SQLiteOpenHelper {
 
         db.execSQL(CREATE_CONTACT_TABLE);
         db.execSQL(CREATE_HASHTAG_TABLE);
-    }
 
-    public void onCreatePhoto(SQLiteDatabase db) {
-        String CREATE_TABLE_PHOTO = "CREATE TABLE photo (" +
+        String CREATE_TABLE_HASHTAG = "CREATE TABLE photo_hashtag (" +
                 "id INTEGER PRIMARY KEY," +
-                "file_name TEXT," +
-                "name TEXT," +
-                "introduction TEXT)";
-
-        String CREATE_TABLE_HASHTAG = "CREATE TABLE hashtag (" +
-                "id INTEGER PRIMARY KEY," +
+                "path TEXT," +
                 "hashtag TEXT)";
 
-        db.execSQL(CREATE_TABLE_PHOTO);
         db.execSQL(CREATE_TABLE_HASHTAG);
     }
+
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -93,15 +86,41 @@ public class DBHelper extends SQLiteOpenHelper {
         cursor.close();
         return contactList;
     }
-    public String onSearchContactHashTag(SQLiteDatabase db, String id){
+    public String onSearchContactHashTag(SQLiteDatabase db, String path){
         Cursor cursor = null;
         db = this.getReadableDatabase();
         try {
             cursor = db.query(
                     "contact_hashtag",   // 테이블 이름
                     new String[]{"hashtag"},              // 반환할 컬럼들
-                    "id = ?",            // 선택 조건
-                    new String[] { id }, // 선택 조건에 대한 값
+                    "path = ?",            // 선택 조건
+                    new String[] { path }, // 선택 조건에 대한 값
+                    null,                // group by
+                    null,                // having
+                    null                 // order by
+            );
+            // 쿼리 결과 처리...
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        String out = "";
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                out = cursor.getString(cursor.getColumnIndex("hashtag"));
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        return out;
+    }
+    public String onSearchPhotoHashTag(SQLiteDatabase db, String path){
+        Cursor cursor = null;
+        db = this.getReadableDatabase();
+        try {
+            cursor = db.query(
+                    "photo_hashtag",   // 테이블 이름
+                    new String[]{"path, hashtag"},              // 반환할 컬럼들
+                    "path = ?",            // 선택 조건
+                    new String[] { path }, // 선택 조건에 대한 값
                     null,                // group by
                     null,                // having
                     null                 // order by
@@ -124,11 +143,9 @@ public class DBHelper extends SQLiteOpenHelper {
     public List<Map<String, String>> search(String query) {
         List<Map<String, String>> searchResults = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-
         // 검색 쿼리
         String selection = "name LIKE ? OR phone_num LIKE ?";
         String[] selectionArgs = {"%" + query + "%", "%" + query + "%"};
-
         Cursor cursor = db.query(
                 "contact",
                 new String[]{"name", "phone_num"},
@@ -138,7 +155,6 @@ public class DBHelper extends SQLiteOpenHelper {
                 null,
                 null
         );
-
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 // 결과 추가
@@ -171,6 +187,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
+    //에러 확인용도
     public void checkTableList(SQLiteDatabase db){
         List<String> tableNames = new ArrayList<>();
         db = this.getReadableDatabase();

@@ -47,6 +47,7 @@ public class Photo extends Fragment implements DataUpdateListener {
 
     public Photo() {
     }
+
     private GridAdapter adapter;
     private View view;
 
