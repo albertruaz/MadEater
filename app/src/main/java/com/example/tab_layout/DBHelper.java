@@ -86,15 +86,15 @@ public class DBHelper extends SQLiteOpenHelper {
         cursor.close();
         return contactList;
     }
-    public String onSearchContactHashTag(SQLiteDatabase db, String path){
+    public String onSearchContactHashTag(SQLiteDatabase db, String id){
         Cursor cursor = null;
         db = this.getReadableDatabase();
         try {
             cursor = db.query(
                     "contact_hashtag",   // 테이블 이름
                     new String[]{"hashtag"},              // 반환할 컬럼들
-                    "path = ?",            // 선택 조건
-                    new String[] { path }, // 선택 조건에 대한 값
+                    "id = ?",            // 선택 조건
+                    new String[] { id }, // 선택 조건에 대한 값
                     null,                // group by
                     null,                // having
                     null                 // order by
@@ -175,10 +175,10 @@ public class DBHelper extends SQLiteOpenHelper {
         db.delete("contact", "id = ?", new String[]{contactId});
         db.delete("contact_hashtag", "id = ?", new String[]{contactId});
     }
-    public void onEditContact(SQLiteDatabase db, String contact_id, String hashtag, ContentValues values, ContentValues values2){
+    public void onEditContact(SQLiteDatabase db, String contact_id, String hashtag, ContentValues values, ContentValues values2) {
         db = this.getReadableDatabase();
         String selection = "id = ?";
-        String[] selectionArgs = { contact_id };
+        String[] selectionArgs = {contact_id};
 
         // 테이블 업데이트
         db.update("contact", values, selection, selectionArgs);
@@ -191,10 +191,11 @@ public class DBHelper extends SQLiteOpenHelper {
             newHashtagValues.put("hashtag", hashtag);
             db.insert("contact_hashtag", null, newHashtagValues);
         }
-        else {
-            db.update("contact_hashtag", values2, selection, selectionArgs);
-        }
+        db.update("contact_hashtag", values2, selection, selectionArgs);
+
+
     }
+
     public void onEditPhotoHashtag(SQLiteDatabase db, String path, String hashtag){
         db = this.getReadableDatabase();
         String existingHashtag = onSearchPhotoHashTag(db, path);
