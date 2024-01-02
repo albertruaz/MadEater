@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Contact"
-    android:id="@+id/fragment_container">
+    android:id="@+id/fragment_container"
+    android:clickable="true">
 
     <ListView
         android:id="@+id/listContact"
@@ -13,14 +14,14 @@
         android:layout_height="wrap_content"
         android:layout_weight="10"/>
 
-    <!-- 버튼 -->
     <Button
         android:id="@+id/addContactButton"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:layout_gravity="bottom|end"
-        android:layout_margin="10dp"
+        android:layout_margin="7dp"
         android:text="+"
-        android:textStyle="bold"/>
+        android:textSize="40dp"
+        android:textAlignment="center"/>
 
 </FrameLayout>
