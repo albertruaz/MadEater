@@ -75,7 +75,7 @@ public class ContactDetailFragment extends Fragment {
         EditText detailPhoneNumEditText = view.findViewById(R.id.detailPhoneNumEditText);
 
         TextView detailHashTagTextView = view.findViewById(R.id.detailHashTagTextView);
-        EditText detailHashTagEditText = view.findViewById(R.id.detailPhoneNumEditText);
+        EditText detailHashTagEditText = view.findViewById(R.id.detailHashTagEditText);
 
         // 각종 버튼들
         Button deleteButton = view.findViewById(R.id.deleteContactButton);
@@ -163,12 +163,10 @@ public class ContactDetailFragment extends Fragment {
         saveContactButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // 수정사항 저장될 수 있게
-                String contactId = args.getString("contactId", "");
-
                 ContentValues values = new ContentValues();
                 values.put("name", detailNameEditText.getText().toString());
                 values.put("phone_num", detailPhoneNumEditText.getText().toString());
+                values.put("contactHashTag", detailHashTagEditText.getText().toString());
 
                 dbHelper.onEditContact(db, contactId, values);
                 updateListener.onDataUpdated();

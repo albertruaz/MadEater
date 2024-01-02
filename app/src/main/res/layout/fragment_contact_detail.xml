@@ -30,6 +30,7 @@
         android:id="@+id/detailPhoneNumTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/detailNameTextView"
         android:textSize="20sp"
         android:layout_gravity="center_horizontal" />
 
@@ -37,6 +38,7 @@
         android:id="@+id/detailPhoneNumEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/detailNameEditText"
         android:textSize="20sp"
         android:layout_gravity="center_horizontal"
         android:visibility="gone"/>
@@ -45,6 +47,7 @@
         android:id="@+id/detailHashTagTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/detailPhoneNumTextView"
         android:textSize="20sp"
         android:layout_gravity="center_horizontal" />
 
@@ -52,6 +55,7 @@
         android:id="@+id/detailHashTagEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/detailPhoneNumEditText"
         android:textSize="20sp"
         android:layout_gravity="center_horizontal"
         android:visibility="gone"/>
