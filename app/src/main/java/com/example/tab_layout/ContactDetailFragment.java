@@ -21,10 +21,6 @@ public class ContactDetailFragment extends Fragment {
 
     private DBHelper dbHelper;
     private SQLiteDatabase db;
-    private TextView detailNameTextView;
-    private EditText detailNameEditText;
-    private Button editContactButton;
-
     DataUpdateListener updateListener;
 
     @Override
@@ -64,8 +60,12 @@ public class ContactDetailFragment extends Fragment {
         TextView nameTextView = view.findViewById(R.id.detailNameTextView);
         TextView phoneNumTextView = view.findViewById(R.id.detailPhoneNumTextView);
         Button deleteButton = view.findViewById(R.id.deleteContactButton);
+        EditText detailNameTextView = view.findViewById(R.id.detailNameTextView);
+        EditText detailNameEditText = view.findViewById(R.id.detailNameEditText);
+        Button editContactButton = view.findViewById(R.id.editContactButton);
         Button callButton = view.findViewById(R.id.callButton);
         Button messageButton = view.findViewById(R.id.textButton);
+
 
         Bundle args = getArguments();
         if (args != null) {
@@ -126,11 +126,6 @@ public class ContactDetailFragment extends Fragment {
                 startActivity(dialIntent);
             }
         });
-
-        // 이름 TextView 및 EditText 가져오기
-        detailNameTextView = view.findViewById(R.id.detailNameTextView);
-        detailNameEditText = view.findViewById(R.id.detailNameEditText);
-        editContactButton = view.findViewById(R.id.editContactButton);
 
         // "EDIT" 버튼 클릭 시 동작 구현
         editContactButton.setOnClickListener(new View.OnClickListener() {
