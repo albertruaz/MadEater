@@ -11,17 +11,18 @@
     <ListView
         android:id="@+id/listContact"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="10"/>
+        android:layout_height="match_parent" />
 
     <Button
         android:id="@+id/addContactButton"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="75sp"
+        android:layout_height="50sp"
         android:layout_gravity="bottom|end"
         android:layout_margin="7dp"
+        android:background="@drawable/rounded_button"
         android:text="+"
-        android:textSize="40dp"
+        android:textSize="20dp"
         android:textAlignment="center"/>
+    </LinearLayout>
 
 </FrameLayout>
