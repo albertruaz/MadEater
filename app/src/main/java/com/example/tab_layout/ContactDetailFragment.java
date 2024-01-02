@@ -171,7 +171,6 @@ public class ContactDetailFragment extends Fragment {
                 values2.put("hashtag", detailHashTagEditText.getText().toString());
 
                 dbHelper.onEditContact(db, contactId, contactHashTag, values, values2);
-                updateListener.onDataUpdated();
 
                 saveContactButton.setVisibility(View.GONE);
                 editContactButton.setVisibility(View.VISIBLE);
@@ -187,6 +186,8 @@ public class ContactDetailFragment extends Fragment {
                 detailHashTagEditText.setVisibility(View.GONE);
                 detailHashTagTextView.setVisibility(View.VISIBLE);
                 detailHashTagTextView.setText(detailHashTagEditText.getText());
+
+                updateListener.onDataUpdated();
             }
         });
 
