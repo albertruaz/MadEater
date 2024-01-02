@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
+    android:padding="16sp"
     android:background="@color/white"
     android:clickable="true"
     android:focusable="true">
@@ -62,18 +62,18 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="70sp"
         android:layout_below="@id/detailHashTagTextView"
         android:orientation="horizontal"
-        android:gravity="center_horizontal">
+        android:gravity="center_horizontal"
+        android:layout_marginTop="30sp">
 
         <Button
             android:id="@+id/deleteContactButton"
             android:layout_width="0dp"
             android:layout_weight="0.2"
-            android:layout_height="70dp"
-            android:layout_margin="7dp"
+            android:layout_height="match_parent"
+            android:layout_margin="7sp"
             android:background="@drawable/rounded_button"
             android:text="DELETE"/>
 
@@ -81,8 +81,8 @@
             android:id="@+id/editContactButton"
             android:layout_width="0dp"
             android:layout_weight="0.2"
-            android:layout_height="70dp"
-            android:layout_margin="7dp"
+            android:layout_height="match_parent"
+            android:layout_margin="7sp"
             android:background="@drawable/rounded_button"
             android:text="EDIT"/>
 
@@ -90,18 +90,18 @@
             android:id="@+id/saveContactButton"
             android:layout_width="0dp"
             android:layout_weight="0.2"
-            android:layout_height="70dp"
-            android:layout_margin="7dp"
-            android:text="SAVE"
+            android:layout_height="match_parent"
+            android:layout_margin="7sp"
             android:background="@drawable/rounded_button"
+            android:text="SAVE"
             android:visibility="gone"/>
 
         <Button
             android:id="@+id/callButton"
             android:layout_width="0dp"
             android:layout_weight="0.2"
-            android:layout_height="70dp"
-            android:layout_margin="7dp"
+            android:layout_height="match_parent"
+            android:layout_margin="7sp"
             android:background="@drawable/rounded_button"
             android:text="Call"/>
 
@@ -109,11 +109,13 @@
             android:id="@+id/textButton"
             android:layout_width="0dp"
             android:layout_weight="0.2"
-            android:layout_height="70dp"
-            android:layout_margin="7dp"
+            android:layout_height="match_parent"
+            android:layout_margin="7sp"
             android:background="@drawable/rounded_button"
             android:text="Text"/>
 
-    </LinearLayout>
+    </LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="70sp">
 
 </LinearLayout>
