@@ -23,6 +23,5 @@
         android:text="+"
         android:textSize="20dp"
         android:textAlignment="center"/>
-    </LinearLayout>
 
 </FrameLayout>

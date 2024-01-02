@@ -19,18 +19,40 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
+import com.naver.maps.geometry.LatLng;
+import com.naver.maps.map.CameraUpdate;
+import com.naver.maps.map.LocationTrackingMode;
 import com.naver.maps.map.MapFragment;
 import com.naver.maps.map.NaverMap;
 import com.naver.maps.map.OnMapReadyCallback;
+import com.naver.maps.map.overlay.LocationOverlay;
+import com.naver.maps.map.overlay.Marker;
+import com.naver.maps.map.overlay.Overlay;
+import com.naver.maps.map.util.FusedLocationSource;
 
 public class Map extends Fragment implements DataUpdateListener {
 
     private View view;
 
+//    private static final int PERMISSION_REQUEST_CODE = 100;
+//    private static final String[] PERMISSION = {
+//            Manifest.permission.ACCESS_FINE_LOCATION,
+//            Manifest.permission.ACCESS_COARSE_LOCATION
+//    };
+
+    private FusedLocationSource mLocationSource;
+    private NaverMap mNaverMap;
+
     public Map() {
     }
 
+//    @Override
+//    public  void onCreate(){
+//        mLocationSource =
+//                new FusedLocationSource(this, PERMISSION_REQUEST_CODE);
+//    }
     @Override
     public void onDataUpdated() {
     }
@@ -38,16 +60,6 @@ public class Map extends Fragment implements DataUpdateListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-//        // view생성, fragment기 때문에
-//        view = inflater.inflate(R.layout.fragment_map, container, false);
-//        FragmentContainerView map_view = view.findViewById(R.id.map_fragment); //xml 부분 가져오기
-//
-//
-//        map_view.setAdapter(RecyclerView);
-//
-//
-//        return view;
 
         View view = inflater.inflate(R.layout.fragment_map, container, false);
 
@@ -61,10 +73,43 @@ public class Map extends Fragment implements DataUpdateListener {
         mapFragment.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(@NonNull NaverMap naverMap) {
+
+                CameraUpdate cameraUpdate = CameraUpdate.scrollTo(new LatLng(36.36409483542151, 127.35876172153934 ));
+                naverMap.moveCamera(cameraUpdate);
+
+
+                //경로가 제대로 뜨지는 않는 상태
+                LocationOverlay locationOverlay = naverMap.getLocationOverlay();
+                locationOverlay.setVisible(true);
+                locationOverlay.setPosition(new LatLng(36.36409483542151, 127.35876172153934 ));
+
                 // 여기서 지도 관련 설정을 수행합니다.
+                Marker marker = new Marker();
+                marker.setCaptionText("요시다");
+                marker.setPosition(new LatLng(36.363583769325736, 127.35864516758305));
+                marker.setTag("1");
+
+                marker.setMap(naverMap);
+                marker.setOnClickListener(new Overlay.OnClickListener() {
+                    @Override
+                    public boolean onClick(@NonNull Overlay overlay) {
+                        String clickedMarkerId = (String) overlay.getTag();
+                        onMarkerClicked(clickedMarkerId);
+                        return false;
+                    }
+                });
             }
         });
 
         return view;
+    }
+    private void onMarkerClicked(String clickedMarkerId) {
+        Activity activity = getActivity();
+        if (activity != null) {
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragment_container_map, ContactDetailFragment.newInstance("","",clickedMarkerId),"data_display_fragment");
+            transaction.addToBackStack(null);
+            transaction.commit();
+        }
     }
 }
