@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.EditText;
 import android.database.sqlite.SQLiteDatabase;
 
 import androidx.fragment.app.Fragment;
@@ -20,6 +21,10 @@ public class ContactDetailFragment extends Fragment {
 
     private DBHelper dbHelper;
     private SQLiteDatabase db;
+    private TextView detailNameTextView;
+    private EditText detailNameEditText;
+    private Button editContactButton;
+
     DataUpdateListener updateListener;
 
     @Override
@@ -119,6 +124,24 @@ public class ContactDetailFragment extends Fragment {
                 String phoneNum = args.getString("phoneNum", "");
                 Intent dialIntent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + phoneNum));
                 startActivity(dialIntent);
+            }
+        });
+
+        // 이름 TextView 및 EditText 가져오기
+        detailNameTextView = view.findViewById(R.id.detailNameTextView);
+        detailNameEditText = view.findViewById(R.id.detailNameEditText);
+        editContactButton = view.findViewById(R.id.editContactButton);
+
+        // "EDIT" 버튼 클릭 시 동작 구현
+        editContactButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TextView를 숨기고 EditText를 보여줌
+                detailNameTextView.setVisibility(View.GONE);
+                detailNameEditText.setVisibility(View.VISIBLE);
+
+                // EditText에 현재 TextView의 텍스트 설정
+                detailNameEditText.setText(detailNameTextView.getText());
             }
         });
 

@@ -17,6 +17,15 @@
         android:textStyle="bold"
         android:layout_gravity="center_horizontal" />
 
+    <EditText
+        android:id="@+id/detailNameEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:layout_gravity="center_horizontal"
+        android:visibility="gone"/>
+
     <TextView
         android:id="@+id/detailPhoneNumTextView"
         android:layout_width="wrap_content"
@@ -37,6 +46,13 @@
             android:layout_height="80dp"
             android:layout_margin="10dp"
             android:text="DELETE"/>
+
+        <Button
+            android:id="@+id/editContactButton"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_margin="10dp"
+            android:text="EDIT"/>
 
         <Button
             android:id="@+id/callButton"
