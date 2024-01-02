@@ -99,11 +99,11 @@ public class DBHelper extends SQLiteOpenHelper {
                     null,                // having
                     null                 // order by
             );
-            // 쿼리 결과 처리...
         } catch (Exception e) {
             e.printStackTrace();
         }
-        String out = "";
+
+        String out = null;
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 out = cursor.getString(cursor.getColumnIndex("hashtag"));
@@ -118,19 +118,17 @@ public class DBHelper extends SQLiteOpenHelper {
         try {
             cursor = db.query(
                     "photo_hashtag",   // 테이블 이름
-                    new String[]{"path, hashtag"},              // 반환할 컬럼들
+                    new String[]{"hashtag"},              // 반환할 컬럼들
                     "path = ?",            // 선택 조건
                     new String[] { path }, // 선택 조건에 대한 값
                     null,                // group by
                     null,                // having
                     null                 // order by
             );
-            // 쿼리 결과 처리...
         } catch (Exception e) {
             e.printStackTrace();
-            // 예외 처리 로직
         }
-        String out = "";
+        String out = null;
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 out = cursor.getString(cursor.getColumnIndex("hashtag"));
@@ -199,22 +197,21 @@ public class DBHelper extends SQLiteOpenHelper {
     }
     public void onEditPhotoHashtag(SQLiteDatabase db, String path, String hashtag){
         db = this.getReadableDatabase();
-        String selection = "path = ?";
-        String[] selectionArgs = { path };
-
-        ContentValues newHashtagValues = new ContentValues();
-        newHashtagValues.put("hashtag", hashtag);
-        // 테이블 업데이트
-        db.update("photo_hashtag", newHashtagValues, selection, selectionArgs);
-
-        // 새로운 hashtag 생성 및 저장
         String existingHashtag = onSearchPhotoHashTag(db, path);
         if (existingHashtag == null || existingHashtag.isEmpty()) {
             ContentValues changeHashtag = new ContentValues();
             changeHashtag.put("path", path);
             changeHashtag.put("hashtag", hashtag); // 여기에 새로운 hashtag 값을 넣어줘
-            db.insert("contact_hashtag", null, changeHashtag);
+            db.insert("photo_hashtag", null, changeHashtag);
+        } else {
+            String selection = "path = ?";
+            String[] selectionArgs = { path };
+            ContentValues newHashtagValues = new ContentValues();
+            newHashtagValues.put("hashtag", hashtag);
+            db.update("photo_hashtag", newHashtagValues, selection, selectionArgs);
         }
+        existingHashtag = onSearchPhotoHashTag(db, path);
+
     }
 
     //에러 확인용도

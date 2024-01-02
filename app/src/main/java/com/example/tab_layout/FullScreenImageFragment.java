@@ -57,7 +57,7 @@ public class FullScreenImageFragment extends Fragment {
 
         // 해시태그? 일단 가져오기
         String contactHashTag = dbHelper.onSearchPhotoHashTag(db, imagePath);
-        TextView titleView = view.findViewById(R.id.title);
+        TextView titleView = view.findViewById(R.id.hashtagView);
         titleView.setText(contactHashTag);
 
         TextView hashtagView = view.findViewById(R.id.hashtagView);
@@ -65,23 +65,27 @@ public class FullScreenImageFragment extends Fragment {
 
         // "EDIT" 버튼
         Button editButton = view.findViewById(R.id.editButton);
+        Button saveButton = view.findViewById(R.id.saveButton);
+
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                editButton.setVisibility(View.GONE);
+                saveButton.setVisibility(View.VISIBLE);
 
                 hashtagView.setVisibility(View.GONE);
                 hashtagEdit.setVisibility(View.VISIBLE);
                 hashtagEdit.setText(hashtagView.getText());
             }
         });
-        Button saveButton = view.findViewById(R.id.saveButton);
+
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // 수정사항 저장될 수 있게
-
-                dbHelper.onEditPhotoHashtag(db, imagePath, hashtagView.getText().toString());
-
+                saveButton.setVisibility(View.GONE);
+                editButton.setVisibility(View.VISIBLE);
+                String hashtag = hashtagEdit.getText().toString();
+                dbHelper.onEditPhotoHashtag(db, imagePath, hashtag);
                 hashtagEdit.setVisibility(View.GONE);
                 hashtagView.setVisibility(View.VISIBLE);
                 hashtagView.setText(hashtagEdit.getText());
