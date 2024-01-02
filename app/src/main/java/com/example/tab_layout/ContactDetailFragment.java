@@ -185,7 +185,7 @@ public class ContactDetailFragment extends Fragment {
 
                 detailHashTagEditText.setVisibility(View.GONE);
                 detailHashTagTextView.setVisibility(View.VISIBLE);
-                detailHashTagTextView.setText(detailHashTagTextView.getText());
+                detailHashTagTextView.setText(detailHashTagEditText.getText());
             }
         });
 
