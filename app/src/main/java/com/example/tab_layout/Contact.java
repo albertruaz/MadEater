@@ -139,5 +139,4 @@ public class Contact extends Fragment implements DataUpdateListener {
         return view;
     }
 
-
 }
