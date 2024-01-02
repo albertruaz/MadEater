@@ -83,6 +83,7 @@ public class Photo extends Fragment implements DataUpdateListener {
 
             try {
                 files = assetManager.list("images");
+                int s;
             } catch (IOException e) {
                 e.printStackTrace();
             }

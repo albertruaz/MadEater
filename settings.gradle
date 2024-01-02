@@ -2,7 +2,12 @@ pluginManagement {
     repositories {
         gradlePluginPortal()
         google()
-        maven { url "https://jitpack.io" }
+        maven {
+            url "https://jitpack.io"
+        }
+        maven {
+            url 'https://naver.jfrog.io/artifactory/maven/'
+        }
         mavenCentral()
     }
 }
@@ -10,7 +15,12 @@ dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
-        maven { url "https://jitpack.io" }
+        maven {
+            url 'https://naver.jfrog.io/artifactory/maven/'
+        }
+        maven {
+            url "https://jitpack.io"
+        }
         mavenCentral()
     }
 }
