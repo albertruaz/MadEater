@@ -89,7 +89,7 @@ public class ContactDetailFragment extends Fragment {
             name = args.getString("name", "");
             phoneNum = args.getString("phoneNum", "");
             contactId = args.getString("contactId", "");
-            contactHashTag = dbHelper.onSearchContactHashTag(db,contactId);
+            contactHashTag = dbHelper.onSearchContactHashTag(db, contactId);
             detailNameTextView.setText(name);
             detailPhoneNumTextView.setText(phoneNum);
             detailHashTagTextView.setText(contactHashTag);
@@ -112,7 +112,7 @@ public class ContactDetailFragment extends Fragment {
                     phoneNum = args.getString("phoneNum", "");
                     contactId = args.getString("contactId", "");
                     contactHashTag = dbHelper.onSearchContactHashTag(db,contactId);
-                    dbHelper.onContactDelete(db, name, phoneNum, contactId);
+                    dbHelper.onContactDelete(db, name, phoneNum, contactId, contactHashTag);
                     updateListener.onDataUpdated();
                 }
             }
@@ -164,11 +164,12 @@ public class ContactDetailFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 ContentValues values = new ContentValues();
+                ContentValues values2 = new ContentValues();
                 values.put("name", detailNameEditText.getText().toString());
                 values.put("phone_num", detailPhoneNumEditText.getText().toString());
-                values.put("contactHashTag", detailHashTagEditText.getText().toString());
+                values2.put("hashtag", detailHashTagEditText.getText().toString());
 
-                dbHelper.onEditContact(db, contactId, values);
+                dbHelper.onEditContact(db, contactId, contactHashTag, values, values2);
                 updateListener.onDataUpdated();
 
                 saveContactButton.setVisibility(View.GONE);
@@ -184,7 +185,7 @@ public class ContactDetailFragment extends Fragment {
 
                 detailHashTagEditText.setVisibility(View.GONE);
                 detailHashTagTextView.setVisibility(View.VISIBLE);
-                detailHashTagEditText.setText(detailHashTagTextView.getText());
+                detailHashTagTextView.setText(detailHashTagTextView.getText());
             }
         });
 
