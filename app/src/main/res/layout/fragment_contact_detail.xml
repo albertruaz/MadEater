@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -16,6 +17,15 @@
         android:textStyle="bold"
         android:layout_gravity="center_horizontal" />
 
+    <EditText
+        android:id="@+id/detailNameEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:layout_gravity="center_horizontal"
+        android:visibility="gone"/>
+
     <TextView
         android:id="@+id/detailPhoneNumTextView"
         android:layout_width="wrap_content"
@@ -31,12 +41,41 @@
 
 
 
-    <Button
-        android:id="@+id/deleteContactButton"
-        android:layout_width="50dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="10dp"
-        android:text="-" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/deleteContactButton"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_margin="10dp"
+            android:text="DELETE"/>
+
+        <Button
+            android:id="@+id/editContactButton"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_margin="10dp"
+            android:text="EDIT"/>
+
+        <Button
+            android:id="@+id/callButton"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_margin="10dp"
+            android:text="Call"/>
+
+        <Button
+            android:id="@+id/textButton"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_margin="10dp"
+            android:text="Text"/>
+
+    </LinearLayout>
 
 </LinearLayout>
