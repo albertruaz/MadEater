@@ -98,7 +98,7 @@ public class ContactDetailFragment extends Fragment {
                 if (args != null) {
                     String name = args.getString("name", "");
                     String phoneNum = args.getString("phoneNum", "");
-                    db.delete("contact", "name = ? AND phone_num = ?", new String[]{name, phoneNum});
+                    dbHelper.onContactDelete(db, name, phoneNum);
                     updateListener.onDataUpdated();
                 }
             }
@@ -141,7 +141,6 @@ public class ContactDetailFragment extends Fragment {
                 // TextView를 숨기고 EditText를 보여줌
                 detailNameTextView.setVisibility(View.GONE);
                 detailNameEditText.setVisibility(View.VISIBLE);
-
                 // EditText에 현재 TextView의 텍스트 설정
                 detailNameEditText.setText(detailNameTextView.getText());
             }

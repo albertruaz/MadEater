@@ -73,7 +73,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
     public List<Map<String, String>> onSearchContact(SQLiteDatabase db){
-
+//        checkTableList(db);
         List<Map<String, String>> contactList = new ArrayList<Map<String, String>>();
         Cursor cursor = db.query("contact", new String[]{"id", "name", "phone_num"}, null, null, null, null, null);
         if (cursor.moveToFirst()) {
@@ -156,5 +156,25 @@ public class DBHelper extends SQLiteOpenHelper {
         db.close();
 
         return searchResults;
+    }
+
+    public void onContactDelete(SQLiteDatabase db, String name, String phone_num){
+        db = this.getReadableDatabase();
+        db.delete("contact", "name = ? AND phone_num = ?", new String[]{name, phone_num});
+        db.close();
+    }
+
+    public void checkTableList(SQLiteDatabase db){
+        List<String> tableNames = new ArrayList<>();
+        db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT name FROM sqlite_master WHERE type='table'", null);
+        if (cursor.moveToFirst()) {
+            do {
+                String tableName = cursor.getString(0);
+                tableNames.add(tableName);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
     }
 }
