@@ -184,15 +184,17 @@ public class DBHelper extends SQLiteOpenHelper {
 
         // 테이블 업데이트
         db.update("contact", values, selection, selectionArgs);
-        db.update("contact_hashtag", values2, selection, selectionArgs);
 
         // 새로운 hashtag 생성 및 저장
         String existingHashtag = onSearchContactHashTag(db, contact_id);
         if (existingHashtag == null || existingHashtag.isEmpty()) {
             ContentValues newHashtagValues = new ContentValues();
             newHashtagValues.put("id", contact_id);
-            newHashtagValues.put("hashtag", hashtag); // 여기에 새로운 hashtag 값을 넣어줘
+            newHashtagValues.put("hashtag", hashtag);
             db.insert("contact_hashtag", null, newHashtagValues);
+        }
+        else {
+            db.update("contact_hashtag", values2, selection, selectionArgs);
         }
     }
     public void onEditPhotoHashtag(SQLiteDatabase db, String path, String hashtag){
