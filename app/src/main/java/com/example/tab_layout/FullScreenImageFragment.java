@@ -79,22 +79,12 @@ public class FullScreenImageFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 // 수정사항 저장될 수 있게
-                
-                ContentValues values = new ContentValues();
-                values.put("name", detailNameEditText.getText().toString());
-                values.put("phone_num", detailphoneNumEditText.getText().toString());
 
-                dbHelper.onEditContact(db, contactId, values);
-                updateListener.onDataUpdated();
+                dbHelper.onEditPhotoHashtag(db, imagePath, hashtagView.getText().toString());
 
-                detailNameEditText.setVisibility(View.GONE);
-                detailNameTextView.setVisibility(View.VISIBLE);
-                detailNameTextView.setText(detailNameEditText.getText());
-
-                detailphoneNumEditText.setVisibility(View.GONE);
-                detailPhoneNumTextView.setVisibility(View.VISIBLE);
-                detailPhoneNumTextView.setText(detailphoneNumEditText.getText());
-
+                hashtagEdit.setVisibility(View.GONE);
+                hashtagView.setVisibility(View.VISIBLE);
+                hashtagView.setText(hashtagEdit.getText());
             }
         });
 
