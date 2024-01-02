@@ -66,7 +66,7 @@ public class ContactDetailFragment extends Fragment {
         TextView hashTagTextView = view.findViewById(R.id.detailHashTagTextView);
         
         Button deleteButton = view.findViewById(R.id.deleteContactButton);
-        EditText detailNameTextView = view.findViewById(R.id.detailNameTextView);
+        TextView detailNameTextView = view.findViewById(R.id.detailNameTextView);
         EditText detailNameEditText = view.findViewById(R.id.detailNameEditText);
         Button editContactButton = view.findViewById(R.id.editContactButton);
         Button callButton = view.findViewById(R.id.callButton);

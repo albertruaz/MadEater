@@ -22,10 +22,11 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public static synchronized DBHelper getInstance(Context context) {
-        if (instance == null) {
-            instance = new DBHelper(context.getApplicationContext());
-        }
-        return instance;
+        return instance = new DBHelper(context.getApplicationContext());
+//        if (instance == null) {
+//            instance = new DBHelper(context.getApplicationContext());
+//        }
+//        return instance;
     }
 
     @Override
@@ -40,18 +41,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
         db.execSQL(CREATE_CONTACT_TABLE);
         db.execSQL(CREATE_HASHTAG_TABLE);
-
-        List<String> tableNames = new ArrayList<>();
-        db = this.getReadableDatabase(); // 데이터베이스 인스턴스
-
-        Cursor cursor = db.rawQuery("SELECT name FROM sqlite_master WHERE type='table'", null);
-        if (cursor.moveToFirst()) {
-            while (!cursor.isAfterLast()) {
-                tableNames.add(cursor.getString(0));
-                cursor.moveToNext();
-            }
-        }
-        cursor.close();
     }
 
     public void onCreatePhoto(SQLiteDatabase db) {
@@ -103,8 +92,8 @@ public class DBHelper extends SQLiteOpenHelper {
         return contactList;
     }
     public String onSearchContactHashTag(SQLiteDatabase db, String id){
-        Cursor cursor = null;
 
+        Cursor cursor = null;
         db = this.getReadableDatabase();
 
         try {
