@@ -107,7 +107,7 @@ public class Map extends Fragment implements DataUpdateListener {
         Activity activity = getActivity();
         if (activity != null) {
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            transaction.replace(R.id.fragment_container_map, ContactDetailFragment.newInstance("","",clickedMarkerId),"data_display_fragment");
+            transaction.replace(R.id.fragment_container_map, ContactDetailFragment.newInstance(clickedMarkerId),"data_display_fragment");
             transaction.addToBackStack(null);
             transaction.commit();
         }

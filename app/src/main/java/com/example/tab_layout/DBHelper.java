@@ -38,19 +38,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 "phone_num TEXT," +
                 "path TEXT," +
                 "hash_tag TEXT)";
-//        String CREATE_HASHTAG_TABLE = "CREATE TABLE contact_hashtag (" +
-//                "id INTEGER PRIMARY KEY," +
-//                "hashtag TEXT)";
 
         db.execSQL(CREATE_CONTACT_TABLE);
-//        db.execSQL(CREATE_HASHTAG_TABLE);
-
-//        String CREATE_TABLE_HASHTAG = "CREATE TABLE photo_hashtag (" +
-//                "id INTEGER PRIMARY KEY," +
-//                "path TEXT," +
-//                "hashtag TEXT)";
-
-//        db.execSQL(CREATE_TABLE_HASHTAG);
     }
 
 
@@ -98,32 +87,36 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
 //    // hashtag 읽어올 때 쓰는 함수
-//    public String onSearchContactHashTag(String id){
-//        Cursor cursor = null;
-//        SQLiteDatabase db = this.getReadableDatabase();
-//        try {
-//            cursor = db.query(
-//                    "contact_hashtag",   // 테이블 이름
-//                    new String[]{"hashtag"},              // 반환할 컬럼들
-//                    "id = ?",            // 선택 조건
-//                    new String[] { id }, // 선택 조건에 대한 값
-//                    null,                // group by
-//                    null,                // having
-//                    null                 // order by
-//            );
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//        String out = null;
-//        if (cursor != null && cursor.moveToFirst()) {
-//            do {
-//                out = cursor.getString(cursor.getColumnIndex("hashtag"));
-//            } while (cursor.moveToNext());
-//            cursor.close();
-//        }
-//        return out;
-//    }
+    public Map<String, String> onSearchContactById(String id){
+        Cursor cursor = null;
+        SQLiteDatabase db = this.getReadableDatabase();
+        try {
+            cursor = db.query(
+                    "contact",   // 테이블 이름
+                    new String[]{"id", "name", "phone_num", "path", "hash_tag"},
+                    "id = ?",            // 선택 조건
+                    new String[] { id }, // 선택 조건에 대한 값
+                    null,                // group by
+                    null,                // having
+                    null                 // order by
+            );
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        Map<String, String> out = new HashMap<>();
+
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                out.put("name", cursor.getString(cursor.getColumnIndex("name")));
+                out.put("phone_num", cursor.getString(cursor.getColumnIndex("phone_num")));
+                out.put("path", cursor.getString(cursor.getColumnIndex("path")));
+                out.put("hash_tag", cursor.getString(cursor.getColumnIndex("hash_tag")));
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        return out;
+    }
 
 
     public String onSearchPhotoHashTag(SQLiteDatabase db, String path){

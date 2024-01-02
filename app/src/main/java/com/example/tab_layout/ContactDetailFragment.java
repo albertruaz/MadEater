@@ -27,9 +27,10 @@ public class ContactDetailFragment extends Fragment {
     private DBHelper dbHelper;
     private SQLiteDatabase db;
 
+    private String contactId;
+
     private String name;
     private String phoneNum;
-    private String contactId;
     private String path;
     private String hashTag;
 
@@ -44,11 +45,6 @@ public class ContactDetailFragment extends Fragment {
         ContactDetailFragment fragment = new ContactDetailFragment();
         Bundle args = new Bundle();
         args.putString("contactId", id);
-        args.putString("name", args.getString("name", ""));
-        args.putString("phoneNum", args.getString("phoneNum", ""));
-        args.putString("path", args.getString("path", ""));
-        args.putString("hashTag", args.getString("hashTag", ""));
-
         fragment.setArguments(args);
         return fragment;
     }
@@ -59,6 +55,16 @@ public class ContactDetailFragment extends Fragment {
         // db 설정
         dbHelper = ((MainActivity) getActivity()).getDbHelper();
         db = dbHelper.getWritableDatabase();
+
+        Bundle args = getArguments();
+
+        String ci = args.getString("contactId", "");
+        Map<String,String> map_contact_by_id = dbHelper.onSearchContactById(ci);
+//        String s = map_contact_by_id.get("name");
+        args.putString("name", map_contact_by_id.get("name"));
+        args.putString("phoneNum", map_contact_by_id.get("phone_num"));
+        args.putString("path", map_contact_by_id.get("path"));
+        args.putString("hashTag", map_contact_by_id.get("hash_tag"));
 
         // 화면에 대한 설정
         View view = inflater.inflate(R.layout.fragment_contact_detail, container, false);
@@ -91,7 +97,6 @@ public class ContactDetailFragment extends Fragment {
         Button callButton = view.findViewById(R.id.callButton);
         Button messageButton = view.findViewById(R.id.textButton);
 
-        Bundle args = getArguments();
         if (args != null) {
             contactId = args.getString("contactId", "");
             name = args.getString("name", "");
