@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -67,10 +68,12 @@ public class DBHelper extends SQLiteOpenHelper {
         db.insert("contact", null, values);
     }
 
-    public void onUpgradeContactHashtag(SQLiteDatabase db, int id, ContentValues value){
-        value.put("id", id);
-        db.insert("contact_hashtag", null, value);
+    public void onUpgradeContactHashtag(SQLiteDatabase db, String id, ContentValues value){
+        String selection = "id = ?";
+        String[] selectionArgs = { id };
+        db.update("contact", value, selection, selectionArgs);
     }
+
     public List<Map<String, String>> onSearchContact(SQLiteDatabase db){
 //        checkTableList(db);
         List<Map<String, String>> contactList = new ArrayList<Map<String, String>>();
@@ -156,6 +159,16 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onContactDelete(SQLiteDatabase db, String name, String phone_num, String contactId){
         db = this.getReadableDatabase();
         db.delete("contact", "id = ?", new String[]{contactId});
+    }
+    public void onEditContact(SQLiteDatabase db, String contact_id, ContentValues values){
+        db = this.getReadableDatabase();
+
+        String selection = "id = ?";
+        String[] selectionArgs = { contact_id };
+
+        // 테이블 업데이트
+        db.update("contact", values, selection, selectionArgs);
+
     }
 
     public void checkTableList(SQLiteDatabase db){

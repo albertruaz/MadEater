@@ -1,5 +1,6 @@
 package com.example.tab_layout;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -17,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -61,14 +63,18 @@ public class ContactDetailFragment extends Fragment {
         });
 
         // 이름 및 전화번호 띄우기
-        TextView nameTextView = view.findViewById(R.id.detailNameTextView);
-        TextView phoneNumTextView = view.findViewById(R.id.detailPhoneNumTextView);
-        TextView hashTagTextView = view.findViewById(R.id.detailHashTagTextView);
-        
-        Button deleteButton = view.findViewById(R.id.deleteContactButton);
         TextView detailNameTextView = view.findViewById(R.id.detailNameTextView);
         EditText detailNameEditText = view.findViewById(R.id.detailNameEditText);
+
+        TextView detailPhoneNumTextView = view.findViewById(R.id.detailPhoneNumTextView);
+        EditText detailphoneNumEditText = view.findViewById(R.id.detailphoneNumEditText);
+
+        TextView hashTagTextView = view.findViewById(R.id.detailHashTagTextView);
+
+        // 각종 버튼들
+        Button deleteButton = view.findViewById(R.id.deleteContactButton);
         Button editContactButton = view.findViewById(R.id.editContactButton);
+        Button saveContactButton = view.findViewById(R.id.saveContactButton);
         Button callButton = view.findViewById(R.id.callButton);
         Button messageButton = view.findViewById(R.id.textButton);
 
@@ -78,8 +84,8 @@ public class ContactDetailFragment extends Fragment {
             String phoneNum = args.getString("phoneNum", "");
             String contactId = args.getString("contactId", "");
             String contactHashTag = dbHelper.onSearchContactHashTag(db,contactId);
-            nameTextView.setText(name);
-            phoneNumTextView.setText(phoneNum);
+            detailNameTextView.setText(name);
+            detailPhoneNumTextView.setText(phoneNum);
             hashTagTextView.setText(contactHashTag);
         }
 
@@ -125,6 +131,47 @@ public class ContactDetailFragment extends Fragment {
             }
         });
 
+        // "EDIT" 버튼 클릭 시 동작 구현
+        editContactButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                detailNameTextView.setVisibility(View.GONE);
+                detailNameEditText.setVisibility(View.VISIBLE);
+                detailNameEditText.setText(detailNameTextView.getText());
+
+                detailPhoneNumTextView.setVisibility(View.GONE);
+                detailphoneNumEditText.setVisibility(View.VISIBLE);
+                detailphoneNumEditText.setText(detailPhoneNumTextView.getText());
+            }
+        });
+
+        // "EDIT" 버튼 클릭 이후 저장버튼 구현
+        saveContactButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // 수정사항 저장될 수 있게
+                String contactId = args.getString("contactId", "");
+
+                ContentValues values = new ContentValues();
+                values.put("name", detailNameEditText.getText().toString());
+                values.put("phone_num", detailphoneNumEditText.getText().toString());
+
+                dbHelper.onEditContact(db, contactId, values);
+                updateListener.onDataUpdated();
+
+                detailNameEditText.setVisibility(View.GONE);
+                detailNameTextView.setVisibility(View.VISIBLE);
+                detailNameTextView.setText(detailNameEditText.getText());
+
+                detailphoneNumEditText.setVisibility(View.GONE);
+                detailPhoneNumTextView.setVisibility(View.VISIBLE);
+                detailPhoneNumTextView.setText(detailphoneNumEditText.getText());
+
+
+            }
+        });
+
+
         callButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -132,18 +179,6 @@ public class ContactDetailFragment extends Fragment {
                 String phoneNum = args.getString("phoneNum", "");
                 Intent dialIntent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + phoneNum));
                 startActivity(dialIntent);
-            }
-        });
-
-        // "EDIT" 버튼 클릭 시 동작 구현
-        editContactButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // TextView를 숨기고 EditText를 보여줌
-                detailNameTextView.setVisibility(View.GONE);
-                detailNameEditText.setVisibility(View.VISIBLE);
-                // EditText에 현재 TextView의 텍스트 설정
-                detailNameEditText.setText(detailNameTextView.getText());
             }
         });
 
@@ -163,6 +198,12 @@ public class ContactDetailFragment extends Fragment {
         });
 
         return view;
+    }
+    private void updateDb(Map<String, String> newContact) {
+        ContentValues values = new ContentValues();
+        values.put("name", newContact.get("name"));
+        values.put("phone_num", newContact.get("phoneNum"));
+        dbHelper.onUpgradeContact(db, values);
     }
 }
 

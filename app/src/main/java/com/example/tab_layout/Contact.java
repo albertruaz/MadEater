@@ -1,6 +1,7 @@
 package com.example.tab_layout;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -27,6 +28,12 @@ import java.util.Map;
 
 public class Contact extends Fragment implements DataUpdateListener {
 
+    DataUpdateListener updateListener;
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        updateListener = (DataUpdateListener) context;
+    }
     private DBHelper dbHelper;
     private SQLiteDatabase db;
     private ContactAdapter adapter;
@@ -54,13 +61,13 @@ public class Contact extends Fragment implements DataUpdateListener {
         db = dbHelper.getWritableDatabase();
         // db에서 가져오기
 
-        Map<String, String> newContact = new HashMap<>();
-        newContact.put("name", "몰입캠프");
-        newContact.put("phoneNum", "010-5959-5959");
-        updateDb(newContact);
-        newContact.put("name", "카이스트");
-        newContact.put("phoneNum", "042-350-5959");
-        updateDb(newContact);
+//        Map<String, String> newContact = new HashMap<>();
+//        newContact.put("name", "몰입캠프");
+//        newContact.put("phoneNum", "010-5959-5959");
+//        updateDb(newContact);
+//        newContact.put("name", "카이스트");
+//        newContact.put("phoneNum", "042-350-5959");
+//        updateDb(newContact);
 
         List<Map<String, String>> contactList = dbHelper.onSearchContact(db);
 
@@ -90,12 +97,11 @@ public class Contact extends Fragment implements DataUpdateListener {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // 새로운 연락처를 생성
-                        Map<String, String> newContact = new HashMap<>();
-                        newContact.put("name", dialogNameEditText.getText().toString());
-                        newContact.put("phoneNum", dialogPhoneNumEditText.getText().toString());
-//                        contactList.add(newContact);
-                        updateDb(newContact);
-                        adapter.notifyDataSetChanged();
+                        ContentValues values = new ContentValues();
+                        values.put("name", dialogNameEditText.getText().toString());
+                        values.put("phone_num", dialogPhoneNumEditText.getText().toString());
+                        dbHelper.onUpgradeContact(db, values);
+                        updateListener.onDataUpdated();
                     }
                 });
                 // 새로운 창 내에서 취소
@@ -133,11 +139,5 @@ public class Contact extends Fragment implements DataUpdateListener {
         return view;
     }
 
-    private void updateDb(Map<String, String> newContact) {
-        ContentValues values = new ContentValues();
-        values.put("name", newContact.get("name"));
-        values.put("phone_num", newContact.get("phoneNum"));
-        dbHelper.onUpgradeContact(db, values);
-    }
 
 }
