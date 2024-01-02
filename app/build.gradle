@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.example.tab_layout"
@@ -47,4 +47,8 @@ dependencies {
     implementation 'com.github.esafirm.android-image-picker:imagepicker:2.1.0'
 
     implementation 'jp.wasabeef:blurry:4.0.0'
+
+
+
+    implementation 'com.naver.maps:map-sdk:3.17.0'
 }

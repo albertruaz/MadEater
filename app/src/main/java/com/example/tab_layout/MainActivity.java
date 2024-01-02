@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements DataUpdateListene
         tabLayout.addTab(tabLayout.newTab().setText("Contact"));
         tabLayout.addTab(tabLayout.newTab().setText("Photo"));
         tabLayout.addTab(tabLayout.newTab().setText("Search"));
+        tabLayout.addTab(tabLayout.newTab().setText("Map"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         //adapter 생성

@@ -25,6 +25,9 @@ public class MyAdapter extends FragmentPagerAdapter {
             case 2:
                 Search searchFragment = new Search();
                 return searchFragment;
+            case 3:
+                Map mapFragment = new Map();
+                return mapFragment;
             default:
                 return null;
         }
