@@ -127,10 +127,8 @@ public class Contact extends Fragment implements DataUpdateListener {
                 addContactButton.setVisibility(View.GONE);
                 Map<String, String> clickedContact = contactList.get(position);
                 String idd = clickedContact.get("id");
-                String name = clickedContact.get("name");
-                String phoneNum = clickedContact.get("phoneNum");
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, ContactDetailFragment.newInstance(name, phoneNum,idd),"data_display_fragment");
+                transaction.replace(R.id.fragment_container, ContactDetailFragment.newInstance(idd),"data_display_fragment");
                 transaction.addToBackStack(null);
                 transaction.commit();
             }

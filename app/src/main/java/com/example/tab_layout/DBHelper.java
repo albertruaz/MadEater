@@ -35,20 +35,22 @@ public class DBHelper extends SQLiteOpenHelper {
         String CREATE_CONTACT_TABLE = "CREATE TABLE contact (" +
                 "id INTEGER PRIMARY KEY," +
                 "name TEXT," +
-                "phone_num TEXT)";
-        String CREATE_HASHTAG_TABLE = "CREATE TABLE contact_hashtag (" +
-                "id INTEGER PRIMARY KEY," +
-                "hashtag TEXT)";
+                "phone_num TEXT," +
+                "path TEXT," +
+                "hash_tag TEXT)";
+//        String CREATE_HASHTAG_TABLE = "CREATE TABLE contact_hashtag (" +
+//                "id INTEGER PRIMARY KEY," +
+//                "hashtag TEXT)";
 
         db.execSQL(CREATE_CONTACT_TABLE);
-        db.execSQL(CREATE_HASHTAG_TABLE);
+//        db.execSQL(CREATE_HASHTAG_TABLE);
 
-        String CREATE_TABLE_HASHTAG = "CREATE TABLE photo_hashtag (" +
-                "id INTEGER PRIMARY KEY," +
-                "path TEXT," +
-                "hashtag TEXT)";
+//        String CREATE_TABLE_HASHTAG = "CREATE TABLE photo_hashtag (" +
+//                "id INTEGER PRIMARY KEY," +
+//                "path TEXT," +
+//                "hashtag TEXT)";
 
-        db.execSQL(CREATE_TABLE_HASHTAG);
+//        db.execSQL(CREATE_TABLE_HASHTAG);
     }
 
 
@@ -57,6 +59,8 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS contact");
         onCreate(db);
     }
+
+    // addContact (name, phone number)에서 결과 update할 때 쓰는 함수
     public void onUpgradeContact(SQLiteDatabase db, ContentValues values) {
         db.insert("contact", null, values);
     }
@@ -67,51 +71,61 @@ public class DBHelper extends SQLiteOpenHelper {
         db.update("contact", value, selection, selectionArgs);
     }
 
-    public List<Map<String, String>> onSearchContact(SQLiteDatabase db){
+    // addContact에서 데이터 (name, phone number) 가져올 때 쓰는 함수
+    public List<Map<String, String>>onSearchContact(SQLiteDatabase db){
 //        checkTableList(db);
         List<Map<String, String>> contactList = new ArrayList<Map<String, String>>();
-        Cursor cursor = db.query("contact", new String[]{"id", "name", "phone_num"}, null, null, null, null, null);
+        Cursor cursor = db.query("contact", new String[]{"id", "name", "phone_num", "path", "hash_tag"}, null, null, null, null, null);
         if (cursor.moveToFirst()) {
             do {
                 String id = cursor.getString(cursor.getColumnIndex("id"));
                 String name = cursor.getString(cursor.getColumnIndex("name"));
                 String phoneNum = cursor.getString(cursor.getColumnIndex("phone_num"));
-                Map<String, String> contact = new HashMap<String, String>(2);
+                String path = cursor.getString(cursor.getColumnIndex("path"));
+                String hashTag = cursor.getString(cursor.getColumnIndex("hash_tag"));
+
+                Map<String, String> contact = new HashMap<String, String>(5);
                 contact.put("id", id);
                 contact.put("name", name);
                 contact.put("phoneNum", phoneNum);
+                contact.put("path", path);
+                contact.put("hashTag", hashTag);
                 contactList.add(contact);
             } while (cursor.moveToNext());
         }
         cursor.close();
         return contactList;
     }
-    public String onSearchContactHashTag(SQLiteDatabase db, String id){
-        Cursor cursor = null;
-        db = this.getReadableDatabase();
-        try {
-            cursor = db.query(
-                    "contact_hashtag",   // 테이블 이름
-                    new String[]{"hashtag"},              // 반환할 컬럼들
-                    "id = ?",            // 선택 조건
-                    new String[] { id }, // 선택 조건에 대한 값
-                    null,                // group by
-                    null,                // having
-                    null                 // order by
-            );
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
-        String out = null;
-        if (cursor != null && cursor.moveToFirst()) {
-            do {
-                out = cursor.getString(cursor.getColumnIndex("hashtag"));
-            } while (cursor.moveToNext());
-            cursor.close();
-        }
-        return out;
-    }
+//    // hashtag 읽어올 때 쓰는 함수
+//    public String onSearchContactHashTag(String id){
+//        Cursor cursor = null;
+//        SQLiteDatabase db = this.getReadableDatabase();
+//        try {
+//            cursor = db.query(
+//                    "contact_hashtag",   // 테이블 이름
+//                    new String[]{"hashtag"},              // 반환할 컬럼들
+//                    "id = ?",            // 선택 조건
+//                    new String[] { id }, // 선택 조건에 대한 값
+//                    null,                // group by
+//                    null,                // having
+//                    null                 // order by
+//            );
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        String out = null;
+//        if (cursor != null && cursor.moveToFirst()) {
+//            do {
+//                out = cursor.getString(cursor.getColumnIndex("hashtag"));
+//            } while (cursor.moveToNext());
+//            cursor.close();
+//        }
+//        return out;
+//    }
+
+
     public String onSearchPhotoHashTag(SQLiteDatabase db, String path){
         Cursor cursor = null;
         db = this.getReadableDatabase();
@@ -138,6 +152,53 @@ public class DBHelper extends SQLiteOpenHelper {
         return out;
     }
 
+    // contact 삭제시 쓰는 함수
+    public void onContactDelete(String contactId){
+        SQLiteDatabase db = this.getReadableDatabase();
+        db.delete("contact", "id = ?", new String[]{contactId});
+//        db.delete("contact_hashtag", "id = ?", new String[]{contactId});
+    }
+
+    // contact 수정시 쓰는 함수
+    public void onEditContact(String contact_id, ContentValues values) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String selection = "id = ?";
+        String[] selectionArgs = {contact_id};
+
+        // 테이블 업데이트
+        db.update("contact", values, selection, selectionArgs);
+
+//        // 새로운 hashtag 생성 및 저장
+//        String existingHashtag = onSearchContactHashTag(contact_id);
+//        if (existingHashtag == null || existingHashtag.isEmpty()) {
+//            ContentValues newHashtagValues = new ContentValues();
+//            newHashtagValues.put("id", contact_id);
+//            newHashtagValues.put("hashtag", hashtag);
+//            db.insert("contact_hashtag", null, newHashtagValues);
+//        }
+//        db.update("contact_hashtag", values2, selection, selectionArgs);
+    }
+
+    public void onEditPhotoHashtag(String path, String hashtag){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String existingHashtag = onSearchPhotoHashTag(db, path);
+        if (existingHashtag == null || existingHashtag.isEmpty()) {
+            ContentValues changeHashtag = new ContentValues();
+            changeHashtag.put("path", path);
+            changeHashtag.put("hashtag", hashtag); // 여기에 새로운 hashtag 값을 넣어줘
+            db.insert("photo_hashtag", null, changeHashtag);
+        } else {
+            String selection = "path = ?";
+            String[] selectionArgs = { path };
+            ContentValues newHashtagValues = new ContentValues();
+            newHashtagValues.put("hashtag", hashtag);
+            db.update("photo_hashtag", newHashtagValues, selection, selectionArgs);
+        }
+        existingHashtag = onSearchPhotoHashTag(db, path);
+
+    }
+
+    // search fragment에서 결과 불러올 때 쓰는 함수
     public List<Map<String, String>> search(String query) {
         List<Map<String, String>> searchResults = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -168,51 +229,6 @@ public class DBHelper extends SQLiteOpenHelper {
         db.close();
 
         return searchResults;
-    }
-
-    public void onContactDelete(SQLiteDatabase db, String name, String phone_num, String contactId, String contactHashTag){
-        db = this.getReadableDatabase();
-        db.delete("contact", "id = ?", new String[]{contactId});
-        db.delete("contact_hashtag", "id = ?", new String[]{contactId});
-    }
-    public void onEditContact(SQLiteDatabase db, String contact_id, String hashtag, ContentValues values, ContentValues values2) {
-        db = this.getReadableDatabase();
-        String selection = "id = ?";
-        String[] selectionArgs = {contact_id};
-
-        // 테이블 업데이트
-        db.update("contact", values, selection, selectionArgs);
-
-        // 새로운 hashtag 생성 및 저장
-        String existingHashtag = onSearchContactHashTag(db, contact_id);
-        if (existingHashtag == null || existingHashtag.isEmpty()) {
-            ContentValues newHashtagValues = new ContentValues();
-            newHashtagValues.put("id", contact_id);
-            newHashtagValues.put("hashtag", hashtag);
-            db.insert("contact_hashtag", null, newHashtagValues);
-        }
-        db.update("contact_hashtag", values2, selection, selectionArgs);
-
-
-    }
-
-    public void onEditPhotoHashtag(SQLiteDatabase db, String path, String hashtag){
-        db = this.getReadableDatabase();
-        String existingHashtag = onSearchPhotoHashTag(db, path);
-        if (existingHashtag == null || existingHashtag.isEmpty()) {
-            ContentValues changeHashtag = new ContentValues();
-            changeHashtag.put("path", path);
-            changeHashtag.put("hashtag", hashtag); // 여기에 새로운 hashtag 값을 넣어줘
-            db.insert("photo_hashtag", null, changeHashtag);
-        } else {
-            String selection = "path = ?";
-            String[] selectionArgs = { path };
-            ContentValues newHashtagValues = new ContentValues();
-            newHashtagValues.put("hashtag", hashtag);
-            db.update("photo_hashtag", newHashtagValues, selection, selectionArgs);
-        }
-        existingHashtag = onSearchPhotoHashTag(db, path);
-
     }
 
     //에러 확인용도
