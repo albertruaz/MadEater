@@ -171,6 +171,15 @@ public class DBHelper extends SQLiteOpenHelper {
 //        }
 //        db.update("contact_hashtag", values2, selection, selectionArgs);
     }
+    public void onEditContactPath(String contact_id, ContentValues values) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String selection = "id = ?";
+        String[] selectionArgs = {contact_id};
+
+        // 테이블 업데이트
+        db.update("contact", values, selection, selectionArgs);
+
+    }
 
     public void onEditPhotoHashtag(String path, String hashtag){
         SQLiteDatabase db = this.getReadableDatabase();

@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.EditText;
 import android.database.sqlite.SQLiteDatabase;
@@ -17,6 +18,8 @@ import android.database.sqlite.SQLiteDatabase;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
+import com.bumptech.glide.Glide;
 
 import java.util.HashMap;
 import java.util.List;
@@ -84,9 +87,18 @@ public class ContactDetailFragment extends Fragment {
         TextView detailPhoneNumTextView = view.findViewById(R.id.detailPhoneNumTextView);
         EditText detailPhoneNumEditText = view.findViewById(R.id.detailPhoneNumEditText);
 
-        TextView detailPathTextView = view.findViewById(R.id.detailPathTextView);
-        EditText detailPathEditText = view.findViewById(R.id.detailPathEditText);
+//        TextView detailPathTextView = view.findViewById(R.id.detailPathTextView);
+//        EditText detailPathEditText = view.findViewById(R.id.detailPathEditText);
+        ImageView imageView = view.findViewById(R.id.pathView);
 
+        String p = args.getString("path", "");
+        if(p!=null || p!=""){
+            imageView.setVisibility(View.VISIBLE);
+            // 이미지 가져오기
+            Glide.with(requireContext())
+                    .load(p)
+                    .into(imageView);
+        }
         TextView detailHashTagTextView = view.findViewById(R.id.detailHashTagTextView);
         EditText detailHashTagEditText = view.findViewById(R.id.detailHashTagEditText);
 
@@ -105,7 +117,7 @@ public class ContactDetailFragment extends Fragment {
             hashTag = args.getString("hashTag", "");
             detailNameTextView.setText(name);
             detailPhoneNumTextView.setText(phoneNum);
-            detailPathTextView.setText(path);
+//            detailPathTextView.setText(path);
             detailHashTagTextView.setText(hashTag);
         }
 
@@ -168,9 +180,9 @@ public class ContactDetailFragment extends Fragment {
                 detailPhoneNumEditText.setVisibility(View.VISIBLE);
                 detailPhoneNumEditText.setText(detailPhoneNumTextView.getText());
 
-                detailPathTextView.setVisibility(View.GONE);
-                detailPathEditText.setVisibility(View.VISIBLE);
-                detailPathEditText.setText(detailPathTextView.getText());
+//                detailPathTextView.setVisibility(View.GONE);
+//                detailPathEditText.setVisibility(View.VISIBLE);
+//                detailPathEditText.setText(detailPathTextView.getText());
 
                 detailHashTagTextView.setVisibility(View.GONE);
                 detailHashTagEditText.setVisibility(View.VISIBLE);
@@ -187,7 +199,7 @@ public class ContactDetailFragment extends Fragment {
 //                ContentValues values2 = new ContentValues();
                 values.put("name", detailNameEditText.getText().toString());
                 values.put("phone_num", detailPhoneNumEditText.getText().toString());
-                values.put("path", detailPathEditText.getText().toString());
+                values.put("path", path);
                 values.put("hash_tag", detailHashTagEditText.getText().toString());
 
                 dbHelper.onEditContact(contactId, values);
@@ -203,9 +215,9 @@ public class ContactDetailFragment extends Fragment {
                 detailPhoneNumTextView.setVisibility(View.VISIBLE);
                 detailPhoneNumTextView.setText(detailPhoneNumEditText.getText());
 
-                detailPathEditText.setVisibility(View.GONE);
-                detailPathTextView.setVisibility(View.VISIBLE);
-                detailPathTextView.setText(detailPathEditText.getText());
+//                detailPathEditText.setVisibility(View.GONE);
+//                detailPathTextView.setVisibility(View.VISIBLE);
+//                detailPathTextView.setText(detailPathEditText.getText());
 
                 detailHashTagEditText.setVisibility(View.GONE);
                 detailHashTagTextView.setVisibility(View.VISIBLE);

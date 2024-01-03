@@ -8,19 +8,24 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.bumptech.glide.Glide;
 
+import java.util.List;
+import java.util.Map;
 
 
 public class FullScreenImageFragment extends Fragment {
@@ -83,18 +88,45 @@ public class FullScreenImageFragment extends Fragment {
         // "EDIT" 버튼
         Button editButton = view.findViewById(R.id.editButton);
         Button saveButton = view.findViewById(R.id.saveButton);
+        ListView contactlistView = view.findViewById(R.id.contactlistView);
+        List<Map<String, String>> contactList = dbHelper.onSearchContact(db);
+
+        ContactAdapter adapter = new ContactAdapter(
+                getActivity(),
+                contactList,
+                android.R.layout.simple_list_item_2,
+                new String[]{"name", "phoneNum"},
+                new int[]{android.R.id.text1, android.R.id.text2}
+        );
+        contactlistView.setAdapter(adapter);
+        contactlistView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Map<String, String> clickedContact = contactList.get(position);
+                String idd = clickedContact.get("id");
+                ContentValues newHashtagValues = new ContentValues();
+                newHashtagValues.put("path", imagePath);
+                dbHelper.onEditContactPath(idd,newHashtagValues);
+                fullScreenImageView.setVisibility(View.VISIBLE);
+                contactlistView.setVisibility(View.GONE);
+            }
+        });
 
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                editButton.setVisibility(View.GONE);
-                saveButton.setVisibility(View.VISIBLE);
-
-                hashtagView.setVisibility(View.GONE);
-                hashtagEdit.setVisibility(View.VISIBLE);
-                hashtagEdit.setText(hashtagView.getText());
+//                editButton.setVisibility(View.GONE);
+//                saveButton.setVisibility(View.VISIBLE);
+//
+//                hashtagView.setVisibility(View.GONE);
+//                hashtagEdit.setVisibility(View.VISIBLE);
+//                hashtagEdit.setText(hashtagView.getText());
+                fullScreenImageView.setVisibility(View.GONE);
+                contactlistView.setVisibility(View.VISIBLE);
             }
         });
+
+
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
