@@ -105,7 +105,7 @@ public class Contact extends Fragment implements DataUpdateListener {
         dbHelper = ((MainActivity) getActivity()).getDbHelper();
         db = dbHelper.getWritableDatabase();
         // db에서 가져오기
-        add_data();
+//        add_data();
 
         List<Map<String, String>> contactList = dbHelper.onSearchContact(db);
         List<Map<String, String>> contactList1 = dbHelper.onSearchContact(db);
