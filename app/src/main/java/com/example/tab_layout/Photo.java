@@ -31,6 +31,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -82,8 +84,16 @@ public class Photo extends Fragment implements DataUpdateListener {
             imageView.setPadding(0,0,0,0);
 
             try {
-                files = assetManager.list("images");
-                int s;
+                String[] raw_files = assetManager.list("images");
+                List<String> excludeNames = Arrays.asList("android-logo-mask.png", "android-logo-shine.png", "clock_font.png","progress_font.png"); // 제외하고 싶은 파일 이름들
+                List<String> filteredList = new ArrayList<>();
+
+                for (String file : raw_files) {
+                    if (!excludeNames.contains(file)) {
+                        filteredList.add(file);
+                    }
+                }
+                files = filteredList.toArray(new String[0]);
             } catch (IOException e) {
                 e.printStackTrace();
             }

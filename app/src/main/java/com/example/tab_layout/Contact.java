@@ -70,6 +70,7 @@ public class Contact extends Fragment implements DataUpdateListener {
 //        updateDb(newContact);
 
         List<Map<String, String>> contactList = dbHelper.onSearchContact(db);
+        List<Map<String, String>> contactList1 = dbHelper.onSearchContact(db);
 
         // view 및 adapter 연락
         View view = inflater.inflate(R.layout.fragment_contact, container, false);
