@@ -125,7 +125,7 @@ public class Map extends Fragment implements DataUpdateListener {
                         @Override
                         public boolean onClick(@NonNull Overlay overlay) {
                             int clickedMarkerId = (int) overlay.getTag();
-                            String idd = String.valueOf(clickedMarkerId+1);
+                            String idd = String.valueOf(clickedMarkerId);
                             onMarkerClicked(idd);
                             return false;
                         }
