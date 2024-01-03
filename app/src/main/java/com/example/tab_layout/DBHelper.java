@@ -210,7 +210,7 @@ public class DBHelper extends SQLiteOpenHelper {
         String[] selectionArgs = {"%" + query + "%", "%" + query + "%"};
         Cursor cursor = db.query(
                 "contact",
-                new String[]{"name", "phone_num"},
+                new String[]{"id", "name", "phone_num"},
                 selection,
                 selectionArgs,
                 null,
@@ -220,9 +220,12 @@ public class DBHelper extends SQLiteOpenHelper {
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 // 결과 추가
+                String id = cursor.getString(cursor.getColumnIndex("id"));
                 String name = cursor.getString(cursor.getColumnIndex("name"));
                 String phoneNum = cursor.getString(cursor.getColumnIndex("phone_num"));
+
                 Map<String, String> contact1 = new HashMap<>();
+                contact1.put("id", id);
                 contact1.put("name", name);
                 contact1.put("phoneNum", phoneNum);
                 searchResults.add(contact1);

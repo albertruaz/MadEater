@@ -83,6 +83,8 @@ public class Search extends Fragment implements DataUpdateListener {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //List<Map<String, String>> contactList = dbHelper.onSearchContact(db);
+//                searchResultsListView.setVisibility(View.GONE);
+
                 Map<String, String> clickedContact = searchResults.get(position);
                 String idd = clickedContact.get("id");
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
