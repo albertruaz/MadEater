@@ -65,7 +65,7 @@ public class DBHelper extends SQLiteOpenHelper {
 //        checkTableList(db);
         List<Map<String, String>> contactList = new ArrayList<Map<String, String>>();
         Cursor cursor = db.query("contact", new String[]{"id", "name", "phone_num", "path", "hash_tag"}, null, null, null, null, null);
-        if (cursor.moveToFirst()) {
+        if (cursor != null && cursor.moveToFirst()) {
             do {
                 String id = cursor.getString(cursor.getColumnIndex("id"));
                 String name = cursor.getString(cursor.getColumnIndex("name"));
@@ -81,8 +81,9 @@ public class DBHelper extends SQLiteOpenHelper {
                 contact.put("hashTag", hashTag);
                 contactList.add(contact);
             } while (cursor.moveToNext());
+            cursor.close();
         }
-        cursor.close();
+
         return contactList;
     }
 
@@ -219,7 +220,6 @@ public class DBHelper extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
             cursor.close();
         }
-        db.close();
 
         return searchResults;
     }

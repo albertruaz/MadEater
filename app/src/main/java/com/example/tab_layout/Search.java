@@ -6,11 +6,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import java.util.List;
 import java.util.Map;
@@ -76,6 +78,20 @@ public class Search extends Fragment implements DataUpdateListener {
                 new int[]{android.R.id.text1, android.R.id.text2}
         );
         searchResultsListView.setAdapter(adapter);
+
+        searchResultsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //List<Map<String, String>> contactList = dbHelper.onSearchContact(db);
+                Map<String, String> clickedContact = searchResults.get(position);
+                String idd = clickedContact.get("id");
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragment_container_search, ContactDetailFragment.newInstance(idd),"data_display_fragment");
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        });
+
     }
 
     private List<Map<String, String>> getSearchResults(String query) {
