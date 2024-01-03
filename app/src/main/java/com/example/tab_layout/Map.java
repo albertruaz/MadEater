@@ -114,19 +114,19 @@ public class Map extends Fragment implements DataUpdateListener {
                         new LatLng(36.36372354128543, 127.35861516774486),
                         new LatLng(36.3630357986784, 127.3580632604604)
                 };
-
-                Marker[] markers = new Marker[5];
+                Marker[] markers = new Marker[7];
                 for(int i=0; i < 6; i++){
                     markers[i] = new Marker();
-                    markers[i].setTag(String.valueOf(i+1));
+                    markers[i].setTag(i+1);
                     markers[i].setCaptionText(name[i]);
                     markers[i].setPosition(lat[i]);
                     markers[i].setMap(naverMap);
                     markers[i].setOnClickListener(new Overlay.OnClickListener() {
                         @Override
                         public boolean onClick(@NonNull Overlay overlay) {
-                            String clickedMarkerId = (String) overlay.getTag();
-                            onMarkerClicked(clickedMarkerId);
+                            int clickedMarkerId = (int) overlay.getTag();
+                            String idd = String.valueOf(clickedMarkerId+1);
+                            onMarkerClicked(idd);
                             return false;
                         }
                     });

@@ -87,7 +87,6 @@ public class FullScreenImageFragment extends Fragment {
 
         // "EDIT" 버튼
         Button editButton = view.findViewById(R.id.editButton);
-        Button saveButton = view.findViewById(R.id.saveButton);
         ListView contactlistView = view.findViewById(R.id.contactlistView);
         List<Map<String, String>> contactList = dbHelper.onSearchContact(db);
 
@@ -128,18 +127,18 @@ public class FullScreenImageFragment extends Fragment {
 
 
 
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                saveButton.setVisibility(View.GONE);
-                editButton.setVisibility(View.VISIBLE);
-                String hashtag = hashtagEdit.getText().toString();
-//                dbHelper.onEditPhotoHashtag(imagePath, hashtag);
-                hashtagEdit.setVisibility(View.GONE);
-                hashtagView.setVisibility(View.VISIBLE);
-                hashtagView.setText(hashtagEdit.getText());
-            }
-        });
+//        saveButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                saveButton.setVisibility(View.GONE);
+//                editButton.setVisibility(View.VISIBLE);
+//                String hashtag = hashtagEdit.getText().toString();
+////                dbHelper.onEditPhotoHashtag(imagePath, hashtag);
+//                hashtagEdit.setVisibility(View.GONE);
+//                hashtagView.setVisibility(View.VISIBLE);
+//                hashtagView.setText(hashtagEdit.getText());
+//            }
+//        });
 
         return view;
     }

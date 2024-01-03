@@ -54,7 +54,7 @@
             android:visibility="gone"/>
 
         <LinearLayout
-            android:layout_width="200dp"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/detailHashTagTextView"
             android:layout_weight="0.1"
@@ -64,30 +64,13 @@
             <Button
                 android:id="@+id/editButton"
                 android:layout_width="10dp"
-                android:layout_weight="1"
-                android:layout_height="70dp"
+                android:layout_weight="0.2"
+                android:layout_height="45dp"
                 android:layout_margin="4dp"
                 android:background="@drawable/rounded_button"
                 android:text="EDIT"/>
 
-            <Button
-                android:id="@+id/saveButton"
-                android:layout_width="10dp"
-                android:layout_height="70dp"
-                android:layout_margin="4dp"
-                android:layout_weight="1"
-                android:background="@drawable/rounded_button"
-                android:text="SAVE"
-                android:visibility="gone"/>
 
-            <Button
-                android:id="@+id/deleteButton"
-                android:layout_width="10dp"
-                android:layout_height="70dp"
-                android:layout_margin="4dp"
-                android:layout_weight="1"
-                android:background="@drawable/rounded_button"
-                android:text="DELETE" />
 
         </LinearLayout>
 
