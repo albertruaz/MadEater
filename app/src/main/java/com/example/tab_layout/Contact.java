@@ -52,6 +52,32 @@ public class Contact extends Fragment implements DataUpdateListener {
             adapter.updateData(contactList);
         }
     }
+    public void add_data(){
+        dbHelper.onUpgrade(db,1,1);
+        String[] name = {
+                "청춘",
+                "궁손칼국수",
+                "세 번째 우물",
+        };
+        String[] phoneNum = {
+                "042-862-3628",
+                "",
+                "",
+        };
+        String[] hashtag = {
+                "#한식 #점심 #저렴 #가성비",
+                "#한식 #면 #칼국수",
+                "#한식 #닭 #든든",
+        };
+
+        ContentValues newHashtagValues = new ContentValues();
+        for(int i=0; i < 3; i++){
+            newHashtagValues.put("name", name[i]);
+            newHashtagValues.put("phone_num", phoneNum[i]);
+            newHashtagValues.put("hash_tag", hashtag[i]);
+            dbHelper.onUpgradeContact(db, newHashtagValues);
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -60,14 +86,7 @@ public class Contact extends Fragment implements DataUpdateListener {
         dbHelper = ((MainActivity) getActivity()).getDbHelper();
         db = dbHelper.getWritableDatabase();
         // db에서 가져오기
-
-//        Map<String, String> newContact = new HashMap<>();
-//        newContact.put("name", "몰입캠프");
-//        newContact.put("phoneNum", "010-5959-5959");
-//        updateDb(newContact);
-//        newContact.put("name", "카이스트");
-//        newContact.put("phoneNum", "042-350-5959");
-//        updateDb(newContact);
+        add_data();
 
         List<Map<String, String>> contactList = dbHelper.onSearchContact(db);
         List<Map<String, String>> contactList1 = dbHelper.onSearchContact(db);

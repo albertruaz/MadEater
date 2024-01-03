@@ -77,27 +77,55 @@ public class Map extends Fragment implements DataUpdateListener {
                 CameraUpdate cameraUpdate = CameraUpdate.scrollTo(new LatLng(36.36409483542151, 127.35876172153934 ));
                 naverMap.moveCamera(cameraUpdate);
 
-
                 //경로가 제대로 뜨지는 않는 상태
                 LocationOverlay locationOverlay = naverMap.getLocationOverlay();
                 locationOverlay.setVisible(true);
                 locationOverlay.setPosition(new LatLng(36.36409483542151, 127.35876172153934 ));
 
-                // 여기서 지도 관련 설정을 수행합니다.
-                Marker marker = new Marker();
-                marker.setCaptionText("요시다");
-                marker.setPosition(new LatLng(36.363583769325736, 127.35864516758305));
-                marker.setTag("1");
+                // 마커 하나
+//                Marker marker = new Marker();
+//                marker.setTag("1");
+//                marker.setCaptionText("요시다");
+//                marker.setPosition(new LatLng(36.363583769325736, 127.35864516758305));
+//                marker.setOnClickListener(new Overlay.OnClickListener() {
+//                    @Override
+//                    public boolean onClick(@NonNull Overlay overlay) {
+//                        String clickedMarkerId = (String) overlay.getTag();
+//                        onMarkerClicked(clickedMarkerId);
+//                        return false;
+//                    }
+//                });
+//                marker.setMap(naverMap);
 
-                marker.setMap(naverMap);
-                marker.setOnClickListener(new Overlay.OnClickListener() {
-                    @Override
-                    public boolean onClick(@NonNull Overlay overlay) {
-                        String clickedMarkerId = (String) overlay.getTag();
-                        onMarkerClicked(clickedMarkerId);
-                        return false;
-                    }
-                });
+
+                String[] name = {
+                        "청춘",
+                        "궁손칼국수",
+                        "세 번째 우물"
+                };
+                LatLng[] lat = {
+                        new LatLng(36.36310264257666, 127.3583114800962),
+                        new LatLng(36.363419906557965, 127.35693965585136),
+                        new LatLng(36.362673540236976, 127.35790839680124)
+                };
+
+                Marker[] markers = new Marker[5];
+                for(int i=0; i < 3; i++){
+                    markers[i] = new Marker();
+                    markers[i].setTag(i);
+                    markers[i].setCaptionText(name[i]);
+                    markers[i].setPosition(lat[i]);
+                    markers[i].setMap(naverMap);
+                    markers[i].setOnClickListener(new Overlay.OnClickListener() {
+                        @Override
+                        public boolean onClick(@NonNull Overlay overlay) {
+                            String clickedMarkerId = (String) overlay.getTag();
+                            onMarkerClicked(clickedMarkerId);
+                            return false;
+                        }
+                    });
+                    markers[i].setMap(naverMap);
+                }
             }
         });
 
