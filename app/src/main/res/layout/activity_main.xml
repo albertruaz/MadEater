@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".MainActivity"
-    android:id="@+id/backgroundView"
-    >
+    android:id="@+id/backgroundView">
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#1db995">
-    </com.google.android.material.tabs.TabLayout>
+        android:layout_height="60sp"
+        android:background="#47418A"
+        app:tabTextColor="@color/white"/>
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewPager"
