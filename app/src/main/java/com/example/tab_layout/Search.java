@@ -102,6 +102,7 @@ public class Search extends Fragment implements DataUpdateListener {
 
     private List<Map<String, String>> getSearchResults(String query) {
         List<Map<String, String>> searchResults = dbHelper.search(query);
+
         return searchResults;
     }
 }

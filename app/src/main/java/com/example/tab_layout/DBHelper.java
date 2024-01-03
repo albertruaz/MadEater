@@ -182,8 +182,8 @@ public class DBHelper extends SQLiteOpenHelper {
         List<Map<String, String>> searchResults = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         // 검색 쿼리
-        String selection = "name LIKE ? OR phone_num LIKE ?";
-        String[] selectionArgs = {"%" + query + "%", "%" + query + "%"};
+        String selection = "name LIKE ? OR phone_num LIKE ? OR hash_tag LIKE ?";
+        String[] selectionArgs = {"%" + query + "%", "%" + query + "%", "%" + query + "%"};
         Cursor cursor = db.query(
                 "contact",
                 new String[]{"id", "name", "phone_num"},
