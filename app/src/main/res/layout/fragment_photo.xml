@@ -25,7 +25,8 @@
         android:id="@+id/pickFromGalleryButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Pick from Gallery"
+        android:background="@drawable/rounded_button"
+        android:text="Gallery"
         android:layout_gravity="bottom"
         android:layout_margin="16dp" />
 
