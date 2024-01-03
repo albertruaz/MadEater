@@ -31,17 +31,21 @@ public class Search extends Fragment implements DataUpdateListener {
     }
     @Override
     public void onDataUpdated() {
+        searchResultsListView.setVisibility(View.VISIBLE);
+        searchView.setVisibility(View.VISIBLE);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
 
+
         dbHelper = ((MainActivity) getActivity()).getDbHelper();
         db = dbHelper.getWritableDatabase();
 
         searchView = view.findViewById(R.id.searchView);
         searchResultsListView = view.findViewById(R.id.searchResultsListView);
+
 
         // 검색 기능 구현
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -83,8 +87,8 @@ public class Search extends Fragment implements DataUpdateListener {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //List<Map<String, String>> contactList = dbHelper.onSearchContact(db);
-//                searchResultsListView.setVisibility(View.GONE);
-
+                searchResultsListView.setVisibility(View.GONE);
+                searchView.setVisibility(View.GONE);
                 Map<String, String> clickedContact = searchResults.get(position);
                 String idd = clickedContact.get("id");
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();

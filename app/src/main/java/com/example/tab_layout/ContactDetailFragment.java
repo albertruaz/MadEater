@@ -87,18 +87,16 @@ public class ContactDetailFragment extends Fragment {
         TextView detailPhoneNumTextView = view.findViewById(R.id.detailPhoneNumTextView);
         EditText detailPhoneNumEditText = view.findViewById(R.id.detailPhoneNumEditText);
 
-//        TextView detailPathTextView = view.findViewById(R.id.detailPathTextView);
-//        EditText detailPathEditText = view.findViewById(R.id.detailPathEditText);
         ImageView imageView = view.findViewById(R.id.pathView);
 
         String p = args.getString("path", "");
         if(p!=null || p!=""){
             imageView.setVisibility(View.VISIBLE);
-            // 이미지 가져오기
             Glide.with(requireContext())
                     .load(p)
                     .into(imageView);
         }
+
         TextView detailHashTagTextView = view.findViewById(R.id.detailHashTagTextView);
         EditText detailHashTagEditText = view.findViewById(R.id.detailHashTagEditText);
 

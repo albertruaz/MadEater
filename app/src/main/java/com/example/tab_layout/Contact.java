@@ -57,23 +57,42 @@ public class Contact extends Fragment implements DataUpdateListener {
         String[] name = {
                 "청춘",
                 "궁손칼국수",
-                "세 번째 우물",
+                "세번째우물",
+                "엉클부대찌개",
+                "슬림비빔밥",
+                "매력에 취한 밤"
         };
         String[] phoneNum = {
                 "042-862-3628",
-                "",
-                "",
+                "042-861-1551",
+                "0507-1427-5200",
+                "042-867-0102",
+                "0507-1478-0429",
+                "0507-1473-0774"
+        };
+        String[] path = {
+                "file:///android_asset/images/1.png",
+                "file:///android_asset/images/2.png",
+                "file:///android_asset/images/3.png",
+                "file:///android_asset/images/4.png",
+                "file:///android_asset/images/5.png",
+                "file:///android_asset/images/6.png"
         };
         String[] hashtag = {
                 "#한식 #점심 #저렴 #가성비",
                 "#한식 #면 #칼국수",
                 "#한식 #닭 #든든",
+                "#한식 #부대찌개 #부대전골",
+                "#한식 #비빔밥 #죽",
+                "#한식 #분위기 #술"
         };
 
+
         ContentValues newHashtagValues = new ContentValues();
-        for(int i=0; i < 3; i++){
+        for(int i=0; i < 6; i++){
             newHashtagValues.put("name", name[i]);
             newHashtagValues.put("phone_num", phoneNum[i]);
+            newHashtagValues.put("path", path[i]);
             newHashtagValues.put("hash_tag", hashtag[i]);
             dbHelper.onUpgradeContact(db, newHashtagValues);
         }

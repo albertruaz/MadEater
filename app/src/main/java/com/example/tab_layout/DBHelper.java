@@ -109,6 +109,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         if (cursor != null && cursor.moveToFirst()) {
             do {
+                out.put("id", cursor.getString(cursor.getColumnIndex("id")));
                 out.put("name", cursor.getString(cursor.getColumnIndex("name")));
                 out.put("phone_num", cursor.getString(cursor.getColumnIndex("phone_num")));
                 out.put("path", cursor.getString(cursor.getColumnIndex("path")));
@@ -120,31 +121,6 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
 
-    public String onSearchPhotoHashTag(SQLiteDatabase db, String path){
-        Cursor cursor = null;
-        db = this.getReadableDatabase();
-        try {
-            cursor = db.query(
-                    "photo_hashtag",   // 테이블 이름
-                    new String[]{"hashtag"},              // 반환할 컬럼들
-                    "path = ?",            // 선택 조건
-                    new String[] { path }, // 선택 조건에 대한 값
-                    null,                // group by
-                    null,                // having
-                    null                 // order by
-            );
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        String out = null;
-        if (cursor != null && cursor.moveToFirst()) {
-            do {
-                out = cursor.getString(cursor.getColumnIndex("hashtag"));
-            } while (cursor.moveToNext());
-            cursor.close();
-        }
-        return out;
-    }
 
     // contact 삭제시 쓰는 함수
     public void onContactDelete(String contactId){
@@ -182,24 +158,24 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
-    public void onEditPhotoHashtag(String path, String hashtag){
-        SQLiteDatabase db = this.getReadableDatabase();
-        String existingHashtag = onSearchPhotoHashTag(db, path);
-        if (existingHashtag == null || existingHashtag.isEmpty()) {
-            ContentValues changeHashtag = new ContentValues();
-            changeHashtag.put("path", path);
-            changeHashtag.put("hashtag", hashtag); // 여기에 새로운 hashtag 값을 넣어줘
-            db.insert("photo_hashtag", null, changeHashtag);
-        } else {
-            String selection = "path = ?";
-            String[] selectionArgs = { path };
-            ContentValues newHashtagValues = new ContentValues();
-            newHashtagValues.put("hashtag", hashtag);
-            db.update("photo_hashtag", newHashtagValues, selection, selectionArgs);
-        }
-        existingHashtag = onSearchPhotoHashTag(db, path);
-
-    }
+//    public void onEditPhotoHashtag(String path, String hashtag){
+//        SQLiteDatabase db = this.getReadableDatabase();
+//        String existingHashtag = onSearchPhotoHashTag(db, path);
+//        if (existingHashtag == null || existingHashtag.isEmpty()) {
+//            ContentValues changeHashtag = new ContentValues();
+//            changeHashtag.put("path", path);
+//            changeHashtag.put("hashtag", hashtag); // 여기에 새로운 hashtag 값을 넣어줘
+//            db.insert("photo_hashtag", null, changeHashtag);
+//        } else {
+//            String selection = "path = ?";
+//            String[] selectionArgs = { path };
+//            ContentValues newHashtagValues = new ContentValues();
+//            newHashtagValues.put("hashtag", hashtag);
+//            db.update("photo_hashtag", newHashtagValues, selection, selectionArgs);
+//        }
+//        existingHashtag = onSearchPhotoHashTag(db, path);
+//
+//    }
 
     // search fragment에서 결과 불러올 때 쓰는 함수
     public List<Map<String, String>> search(String query) {

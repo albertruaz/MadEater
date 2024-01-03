@@ -101,18 +101,24 @@ public class Map extends Fragment implements DataUpdateListener {
                 String[] name = {
                         "청춘",
                         "궁손칼국수",
-                        "세 번째 우물"
+                        "세번째우물",
+                        "엉클부대찌개",
+                        "슬림비빔밥",
+                        "매력에 취한 밤"
                 };
                 LatLng[] lat = {
                         new LatLng(36.36310264257666, 127.3583114800962),
                         new LatLng(36.363419906557965, 127.35693965585136),
-                        new LatLng(36.362673540236976, 127.35790839680124)
+                        new LatLng(36.362673540236976, 127.35790839680124),
+                        new LatLng(36.363165498300916, 127.35838697800051),
+                        new LatLng(36.36372354128543, 127.35861516774486),
+                        new LatLng(36.3630357986784, 127.3580632604604)
                 };
 
                 Marker[] markers = new Marker[5];
-                for(int i=0; i < 3; i++){
+                for(int i=0; i < 6; i++){
                     markers[i] = new Marker();
-                    markers[i].setTag(i);
+                    markers[i].setTag(String.valueOf(i+1));
                     markers[i].setCaptionText(name[i]);
                     markers[i].setPosition(lat[i]);
                     markers[i].setMap(naverMap);

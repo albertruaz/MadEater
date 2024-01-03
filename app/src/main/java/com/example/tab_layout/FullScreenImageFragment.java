@@ -78,9 +78,9 @@ public class FullScreenImageFragment extends Fragment {
                 .into(fullScreenImageView);
 
         // 해시태그? 일단 가져오기
-        String contactHashTag = dbHelper.onSearchPhotoHashTag(db, imagePath);
-        TextView titleView = view.findViewById(R.id.hashtagView);
-        titleView.setText(contactHashTag);
+//        String contactHashTag = dbHelper.onSearchPhotoHashTag(db, imagePath);
+//        TextView titleView = view.findViewById(R.id.hashtagView);
+//        titleView.setText(contactHashTag);
 
         TextView hashtagView = view.findViewById(R.id.hashtagView);
         EditText hashtagEdit = view.findViewById(R.id.hashtagEdit);
@@ -134,7 +134,7 @@ public class FullScreenImageFragment extends Fragment {
                 saveButton.setVisibility(View.GONE);
                 editButton.setVisibility(View.VISIBLE);
                 String hashtag = hashtagEdit.getText().toString();
-                dbHelper.onEditPhotoHashtag(imagePath, hashtag);
+//                dbHelper.onEditPhotoHashtag(imagePath, hashtag);
                 hashtagEdit.setVisibility(View.GONE);
                 hashtagView.setVisibility(View.VISIBLE);
                 hashtagView.setText(hashtagEdit.getText());
